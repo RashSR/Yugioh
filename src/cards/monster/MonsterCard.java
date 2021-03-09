@@ -31,8 +31,8 @@ public class MonsterCard extends Card{
 		this.type = type;
 	}
 	
-	private Attribute createAttribute(String attr) {
-		switch (attr) {
+	private Attribute createAttribute(String attribute) {
+		switch (attribute) {
 		case "Finsternis":
 			return Attribute.FINSTERNIS;
 		case "Licht":
@@ -49,8 +49,8 @@ public class MonsterCard extends Card{
 		return null;
 	}
 	
-	private MonsterType createType(String t) {
-		switch(t) {
+	private MonsterType createType(String type) {
+		switch(type) {
 			case "Hexer":
 				return MonsterType.HEXER;
 			case "Insekt":
@@ -73,6 +73,22 @@ public class MonsterCard extends Card{
 				return MonsterType.UNGEHEUER_KRIEGER;
 			case "Maschine":
 				return MonsterType.MASCHINE;
+			case "Aqua":
+				return MonsterType.AQUA;
+			case "Dinosaurier":
+				return MonsterType.DINOSAURIER;
+			case "Unterweltler":
+				return MonsterType.UNTERWELTLER;
+			case "Fisch":
+				return MonsterType.FISCH;
+			case "Pyro":
+				return MonsterType.PYRO;
+			case "Reptil":
+				return MonsterType.REPTIL;
+			case "Donner":
+				return MonsterType.DONNER;
+			case "Gefluegeltes-Ungeheuer":
+				return MonsterType.GEFLUEGELTES_UNGEHEUER;
 		}
 		
 		return null;
