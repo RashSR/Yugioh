@@ -19,7 +19,7 @@ public class Main {
 		Deck d = testDeck();
 		p.setDeck(d);
 		PlayField pf = testPlayField(p);
-		//Game g = new Game(pf, pf);
+		Game g = new Game(pf, pf);
 	}
 	
 	public static PlayField testPlayField(Player p) {
