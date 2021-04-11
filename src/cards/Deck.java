@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cards.monster.fusion.FusionMonster;
+import game.Player;
 
 public class Deck {
 	private String pre = "[Deck] ";

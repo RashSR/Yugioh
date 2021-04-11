@@ -14,12 +14,16 @@ public class Main {
 
 	public static void main(String... args) {
 		PlayerImport.importPlayers();
-		Player p = PlayerImport.getPlayerFromName("Rash");
+		Player rash = PlayerImport.getPlayerFromName("Rash");
+		Player computer = PlayerImport.getPlayerFromName("Computer");
 		testCardImport();
-		Deck d = testDeck();
-		p.setDeck(d);
-		PlayField pf = testPlayField(p);
-		Game g = new Game(pf, pf);
+		Deck rashDeck = testDeck();
+		rash.setDeck(rashDeck);
+		PlayField rashField = testPlayField(rash);
+		Deck computerDeck = testDeck();
+		computer.setDeck(computerDeck);
+		PlayField computerField = testPlayField(computer);
+		Game g = new Game(rashField, computerField);
 	}
 	
 	public static PlayField testPlayField(Player p) {
