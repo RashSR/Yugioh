@@ -1,5 +1,7 @@
 package game.battle;
 
+import java.util.Scanner;
+
 import cards.Card;
 import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
@@ -14,7 +16,7 @@ public class Game {
 	private static final int START_LIFE_POINTS = 8000;
 	private PlayPhase activePhase = PlayPhase.END;
 	private Player activePlayer;
-	
+
 	public Game(PlayField playField1, PlayField playField2) {
 		this.player1 = playField1.getPlayer();
 		this.player2 = playField2.getPlayer();
@@ -22,7 +24,7 @@ public class Game {
 		this.playField2 = playField2;
 		setupGame();
 	}
-	
+
 	private void setupGame() {
 		this.player1.setLifePoints(START_LIFE_POINTS);
 		this.player2.setLifePoints(START_LIFE_POINTS);
@@ -34,14 +36,71 @@ public class Game {
 		playField1.print();
 		startGame();
 	}
-	
+
 	private void startGame() {
-		while(player1.getLifePoints() > 0 || player2.getLifePoints() > 0) {
+		nextPhase();
+		while(player1.getLifePoints() > 0 && player2.getLifePoints() > 0) {
+			if(activePlayer.equals(player2)) {
+				endTurn();
+			}else {
+				chooseOption();
+			}
+		}
+		if(player1.getLifePoints() <= 0) {
+			System.out.println(player2.getName() + " won the duell.");
+		}else {
+			System.out.println(player1.getName() + " won the duell.");
+		}
+	}
+
+	private void chooseOption() {
+		System.out.println("What do you want to do?");
+		System.out.println("(N): Next Phase");
+		System.out.println("(C): Show Hand");
+		System.out.println("(P): Play Card");
+		System.out.println("(E): End your turn");
+		System.out.println("(S): Show Phase");
+		System.out.println("(F): Print Field");
+		System.out.println("(G): Give up");
+		Scanner sc = new Scanner(System.in);
+		String option = sc.nextLine();
+		switch (option) {
+		case "N":
 			nextPhase();
-			player1.showCards();
-			player2.showCards();
+			break;
+		case "P":
+			playCard();
+			break;
+		case "E":
+			endTurn();
+			break;
+		case "S":
+			System.out.println("You are in: " + activePhase);
+			break;
+		case "G":
+			activePlayer.setLifePoints(0);
+			break;
+		case "C":
+			activePlayer.showCards();
+			break;
+		case "F":
+			playField1.print();
+			break;
+		default:
 			break;
 		}
+	}
+	
+	private void playCard() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Which Card you wanna play?");
+		int handIndex = sc.nextInt();
+		playField1.playCard(handIndex, CardMode.FACE_UP, MonsterMode.ATTACK);
+	}
+	
+	private void endTurn() {
+		activePhase = PlayPhase.END;
+		nextPhase();
 	}
 	
 	private void nextPhase() {
@@ -53,9 +112,14 @@ public class Game {
 				activePlayer = player1;
 			}
 			activePlayer.drawCard();
+			nextPhase();
+		}else if(activePhase == PlayPhase.STANDBY) {
+			nextPhase();
+		}else if(activePhase == PlayPhase.END) {
+			nextPhase();
 		}
 	}
-	
+
 	public void playFieldSpell(SpellCard fieldSpell, Player player) {
 		if(fieldSpell.getSpellType() == SpellType.FELD) {
 			if(player.equals(player1)) {
@@ -71,11 +135,11 @@ public class Game {
 			}
 		}
 	}
-	
+
 	public void changeCardState(PlayField pf, int row, int col) {
 		pf.changeState(row, col);
 	}
-	
+
 	public void attack(PlayField attPf, int attCol, PlayField defPf, int defCol) {
 		FieldElement attElement = attPf.getFieldElement(0, attCol);
 		FieldElement defElement = defPf.getFieldElement(0, defCol);
@@ -105,20 +169,20 @@ public class Game {
 			}	
 		}
 	}
-	
+
 	private void sendCardToGrave(Card c) {
 		//TODO: send Cards to the Graveyard
 	}
-	
+
 	private void reduceLifePoints(Player p, int amount) {
 		p.setLifePoints(p.getLifePoints()-amount);
 	}
-	
+
 	private Player getNotActivePlayer() {
 		if(activePlayer.equals(player1)) {
 			return player2;
 		}
 		return player1;
 	}
-	
+
 }

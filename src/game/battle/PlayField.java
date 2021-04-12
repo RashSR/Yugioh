@@ -23,17 +23,24 @@ public class PlayField {
 		this.deck = player.getDeck();
 		this.fusionMonsters = deck.getFusionMonster();
 		this.deck.shuffleDeck();
+		for(int i = 0; i < 5; i++) {
+			monsterField[i] = new FieldElement();
+			spellAndTrapField[i] = new FieldElement();
+		}
 	}
 	
-	public void playCard(Card card, CardMode cm, MonsterMode mm) {
+	public void playCard(int handIndex, CardMode cm, MonsterMode mm) {
+		Card card = player.getHandCardAt(handIndex);
 		int index;
-		if(card instanceof MonsterCard) {
+		if(mm != null) {
 			index = getFreeIndex(monsterField);
 			if(index > -1) {
 				monsterField[index].setCard(card); 
 				monsterField[index].setOwner(player);
 				monsterField[index].setMonsterMode(mm);
 				monsterField[index].setCardMode(cm);
+				player.dropHandCard(index);
+				System.out.println(card);
 			}
 		}else {
 			index = getFreeIndex(spellAndTrapField);

@@ -45,6 +45,20 @@ public class Player {
 	public ArrayList<Card> getHand(){
 		return this.handCards;
 	}
+	
+	public void dropHandCard(int index) {
+		if(index < handCards.size() ) {
+			this.handCards.remove(getHandCardAt(index));
+		}
+	}
+	
+	public Card getHandCardAt(int index) {
+		if(index < handCards.size() ) {
+			return this.handCards.get(index);
+		}
+		System.out.println("You dont have that much HandCards");
+		return null;
+	}
 
 	public int getLifePoints() {
 		return lifePoints;
@@ -85,14 +99,16 @@ public class Player {
 	public String getName() {
 		return this.name;
 	}
-	
+
 	public void showCards() {
-		System.out.println("My Hand:\n");
+		System.out.println("------------------------------------");
+		System.out.println("My Hand:");
 		for(Card c : handCards) {
 			System.out.println(c);
 		}
+		System.out.println("------------------------------------");
 	}
-	
+
 	public String toString() {
 		return name+" hat " + wins + " von " + totalGames + " Duellen gewonnen.";
 	}
