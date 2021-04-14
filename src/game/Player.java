@@ -48,7 +48,7 @@ public class Player {
 	
 	public void dropHandCard(int index) {
 		if(index < handCards.size() ) {
-			this.handCards.remove(getHandCardAt(index));
+			this.handCards.remove(index);
 		}
 	}
 	

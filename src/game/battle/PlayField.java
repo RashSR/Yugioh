@@ -39,14 +39,18 @@ public class PlayField {
 				monsterField[index].setOwner(player);
 				monsterField[index].setMonsterMode(mm);
 				monsterField[index].setCardMode(cm);
-				player.dropHandCard(index);
-				System.out.println(card);
+				monsterField[index].setEmpty(false);
+				System.out.println("You played " + card.getName() + ".");
+				player.dropHandCard(handIndex);
 			}
 		}else {
 			index = getFreeIndex(spellAndTrapField);
 			if(index > -1) {
 				spellAndTrapField[index].setCard(card);
-				spellAndTrapField[index].setCardMode(cm);;
+				spellAndTrapField[index].setCardMode(cm);
+				spellAndTrapField[index].setEmpty(false);
+				System.out.println("You played " + card.getName() + ".");
+				player.dropHandCard(handIndex);
 			}
 		}
 	}
@@ -67,6 +71,7 @@ public class PlayField {
 				return i;
 			}
 		}
+		System.out.println("Wir sind bei -1");
 		return -1;
 	}
 
