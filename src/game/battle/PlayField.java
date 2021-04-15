@@ -7,10 +7,12 @@ import cards.Deck;
 import cards.monster.MonsterCard;
 import cards.monster.fusion.FusionMonster;
 import cards.spell.SpellCard;
+import cards.spell.SpellType;
 import game.Player;
 
 public class PlayField {
 	private Player player;
+	private Game game;
 	private SpellCard fieldSpell;
 	private Deck deck;
 	private ArrayList<Card> graveyard = new ArrayList<>();
@@ -32,7 +34,7 @@ public class PlayField {
 	public void playCard(int handIndex, CardMode cm, MonsterMode mm) {
 		Card card = player.getHandCardAt(handIndex);
 		int index;
-		if(mm != null) {
+		if(card instanceof MonsterCard) {
 			index = getFreeIndex(monsterField);
 			if(index > -1) {
 				monsterField[index].setCard(card); 
@@ -44,6 +46,15 @@ public class PlayField {
 				player.dropHandCard(handIndex);
 			}
 		}else {
+			if(card instanceof SpellCard) {
+				SpellCard sc = (SpellCard) card;
+				if(sc.getSpellType() == SpellType.FELD) {
+					game.playFieldSpell(sc, player);
+					System.out.println("You played " + card.getName() + ".");
+					player.dropHandCard(handIndex);
+					return;
+				}
+			}
 			index = getFreeIndex(spellAndTrapField);
 			if(index > -1) {
 				spellAndTrapField[index].setCard(card);
@@ -133,7 +144,11 @@ public class PlayField {
 		}
 		return true;
 	}
-
+	
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	
 	public Card getSpellOrTrapCardAt(int index) {
 		return spellAndTrapField[index].getCard();
 	}

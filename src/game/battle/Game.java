@@ -22,6 +22,8 @@ public class Game {
 		this.player2 = playField2.getPlayer();
 		this.playField1 = playField1;
 		this.playField2 = playField2;
+		this.playField1.setGame(this);
+		this.playField2.setGame(this);
 		setupGame();
 	}
 
@@ -90,19 +92,41 @@ public class Game {
 			break;
 		}
 	}
-	
+
 	private void playCard() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Which Card you wanna play?");
 		int handIndex = sc.nextInt();
-		playField1.playCard(handIndex, CardMode.FACE_UP, MonsterMode.ATTACK);
+		Card c = activePlayer.getHandCardAt(handIndex);
+		CardMode cm = null;
+		MonsterMode mm = null;
+		if(c instanceof MonsterCard) {
+			System.out.println("Do you want to play your Monster in ATK(0) or DEF(1) mode?");
+			int monsterMode = sc.nextInt();
+			if(monsterMode == 0) {
+				mm = MonsterMode.ATTACK;
+				cm = CardMode.FACE_UP;
+			}else {
+				mm = MonsterMode.DEFENSE;
+				cm = CardMode.FACE_DOWN;
+			}
+		}else {
+			System.out.println("Do you want to play your Card Face-Up(0) or Face-Down(1)?");
+			int cardMode = sc.nextInt();
+			if(cardMode == 0) {
+				cm = CardMode.FACE_UP;
+			}else {
+				cm = CardMode.FACE_DOWN;
+			}
+		}
+		playField1.playCard(handIndex, cm, mm);
 	}
-	
+
 	private void endTurn() {
 		activePhase = PlayPhase.END;
 		nextPhase();
 	}
-	
+
 	private void nextPhase() {
 		activePhase = activePhase.nextPhase();
 		if(activePhase == PlayPhase.DRAW) {
@@ -121,18 +145,16 @@ public class Game {
 	}
 
 	public void playFieldSpell(SpellCard fieldSpell, Player player) {
-		if(fieldSpell.getSpellType() == SpellType.FELD) {
-			if(player.equals(player1)) {
-				if(playField2.hasFieldSpell()) {
-					playField2.removeFieldSpell();
-				}
-				playField1.setFieldSpell(fieldSpell);
-			}else {
-				if(playField1.hasFieldSpell()) {
-					playField1.removeFieldSpell();
-				}
-				playField2.setFieldSpell(fieldSpell);
+		if(player.equals(player1)) {
+			if(playField2.hasFieldSpell()) {
+				playField2.removeFieldSpell();
 			}
+			playField1.setFieldSpell(fieldSpell);
+		}else {
+			if(playField1.hasFieldSpell()) {
+				playField1.removeFieldSpell();
+			}
+			playField2.setFieldSpell(fieldSpell);
 		}
 	}
 
