@@ -14,6 +14,7 @@ public class Game {
 	private PlayField playField1;
 	private PlayField playField2;
 	private static final int START_LIFE_POINTS = 8000;
+	private static final int START_CARDS = 5;
 	private PlayPhase activePhase = PlayPhase.END;
 	private Player activePlayer;
 
@@ -24,6 +25,8 @@ public class Game {
 		this.playField2 = playField2;
 		this.playField1.setGame(this);
 		this.playField2.setGame(this);
+		this.player1.setPlayField(playField1);
+		this.player2.setPlayField(playField2);
 		setupGame();
 	}
 
@@ -31,7 +34,7 @@ public class Game {
 		this.player1.setLifePoints(START_LIFE_POINTS);
 		this.player2.setLifePoints(START_LIFE_POINTS);
 		activePlayer = player1;
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < START_CARDS; i++) {
 			player1.drawCard();
 			player2.drawCard();
 		}
@@ -124,6 +127,7 @@ public class Game {
 
 	private void endTurn() {
 		activePhase = PlayPhase.END;
+		checkTooMuchCards();
 		nextPhase();
 	}
 
@@ -140,10 +144,26 @@ public class Game {
 		}else if(activePhase == PlayPhase.STANDBY) {
 			nextPhase();
 		}else if(activePhase == PlayPhase.END) {
-			nextPhase();
+			endTurn();
 		}
 	}
-
+	
+	private void checkTooMuchCards() {
+		if(activePlayer.getHand().size() > 6) {
+			int index = 0;
+			if(activePlayer.getName().equals("Computer")) {
+				
+			}else {
+				System.out.println("You can only hold 6 Cards. Which one do you want do drop?");
+				activePlayer.showCards();
+				Scanner sc = new Scanner(System.in);
+				index = sc.nextInt();
+			}
+			activePlayer.getPlayField().sendCardToGrave(index);
+			checkTooMuchCards();
+		}
+	}
+	
 	public void playFieldSpell(SpellCard fieldSpell, Player player) {
 		if(player.equals(player1)) {
 			if(playField2.hasFieldSpell()) {

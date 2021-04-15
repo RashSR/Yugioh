@@ -65,7 +65,13 @@ public class PlayField {
 			}
 		}
 	}
-
+	
+	public void sendCardToGrave(int index) {
+		graveyard.add(player.getHandCardAt(index));
+		System.out.println(player.getName() + " dropped " + player.getHandCardAt(index).getName() + ".");
+		player.dropHandCard(index);
+	}
+	
 	public FusionMonster getFusionMonsterByName(String name) {
 		for(FusionMonster fm : fusionMonsters) {
 			if(name.equals(fm.getName())) {

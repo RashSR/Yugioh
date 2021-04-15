@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import cards.Card;
 import cards.Deck;
+import game.battle.PlayField;
 
 public class Player {
 	private String name;
 	private int lifePoints;
+	private PlayField playfield;
 	private Deck deck;
 	private int totalGames;
 	private int wins;
@@ -59,7 +61,15 @@ public class Player {
 		System.out.println("You dont have that much HandCards");
 		return null;
 	}
-
+	
+	public PlayField getPlayField() {
+		return this.playfield;
+	}
+	
+	public void setPlayField(PlayField playfield) {
+		this.playfield = playfield;
+	}
+	
 	public int getLifePoints() {
 		return lifePoints;
 	}
@@ -102,7 +112,7 @@ public class Player {
 
 	public void showCards() {
 		System.out.println("------------------------------------");
-		System.out.println("My Hand:");
+		System.out.println(name + " Hand:");
 		for(Card c : handCards) {
 			System.out.println(c);
 		}
