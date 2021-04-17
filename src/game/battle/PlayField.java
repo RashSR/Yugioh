@@ -39,7 +39,7 @@ public class PlayField {
 			if(player.getSummonCount() > 0) {
 				index = getFreeIndex(monsterField);
 				if(index > -1) {
-					if(canBeSummoned(card)) {
+					if(canBeSummoned(card)) { //TODO Man soll auch etwas beschwören wenn Feld voll ist
 						playHelper(monsterField, card, cm, mm, index, handIndex);
 						player.setSummonCount(player.getSummonCount() - 1);
 					}
@@ -61,7 +61,7 @@ public class PlayField {
 			}
 		}
 	}
-	
+
 	private boolean canBeSummoned(Card card) {
 		MonsterCard monster = (MonsterCard) card;
 		int stars = monster.getStars();
@@ -74,7 +74,7 @@ public class PlayField {
 		}
 		return true;
 	}
-	
+
 	private boolean tributeMonster(int tributes) {
 		System.out.println("To summon the monster you need " + tributes + " Tributes.");
 		if(tributes == 1 && getOccupiedMonsterSlotCount() > 0) {
@@ -90,7 +90,7 @@ public class PlayField {
 		System.out.println("You don't have enough Monster on the Field.");
 		return false;
 	}
-	
+
 	private void makeTribute(int tributes) {
 		Scanner sc = new Scanner(System.in);
 		for(int i = 0; i < tributes; i++) {
@@ -104,7 +104,7 @@ public class PlayField {
 			}
 		}
 	}
-	
+
 	private void playHelper(FieldElement[] arr, Card card, CardMode cm, MonsterMode mm, int index, int handIndex) {
 		if(arr == null) {
 			game.playFieldSpell((SpellCard)card, player);
@@ -124,7 +124,7 @@ public class PlayField {
 		System.out.println(player.getName() + " dropped " + player.getHandCardAt(index).getName() + ".");
 		player.dropHandCard(index);
 	}
-	
+
 	private void sendCardFromFieldToGrave(FieldElement[] arr, int index) {
 		graveyard.add(arr[index].getCard());
 		System.out.println(player.getName() + " send " + arr[index].getCard().getName() + " the to graveyard.");
@@ -269,10 +269,12 @@ public class PlayField {
 		if(hasFieldSpell()) {
 			inUse = "USE";
 		}
+		String[] atk = getAtt();
+		String[] def = getDef();
 		s += ("\n_________________        _________________________________________________________________________________        _________________");
 		s += ("\n|               |        |               |               |               |               |               |        |               |");
-		s += ("\n|       ,       |        |               |               |               |               |               |        |               |");
-		s += ("\n|    __/ \\__    |        |               |               |               |               |               |        |   Friedhof:   |");
+		s += ("\n|       ,       |        |   " + atk[0] + "   |   " + atk[1] + "   |   " + atk[2] + "   |   " + atk[3] + "   |   " + atk[4] + "   |        |               |");
+		s += ("\n|    __/ \\__    |        |   " + def[0] + "   |   " + def[1] + "   |   " + def[2] + "   |   " + def[3] + "   |   " + def[4] + "   |        |   Friedhof:   |");
 		s += ("\n|    \\ " + inUse +" /    |        |               |               |               |               |               |        |       " + graveyard.size() + "       |");
 		s += ("\n|    /_   _\\    |        |               |               |               |               |               |        |               |");
 		s += ("\n|      \\ /      |        |               |               |               |               |               |        |               |");
@@ -290,6 +292,40 @@ public class PlayField {
 		s += ("\n|               |        |               |               |               |               |               |        |               |");
 		s += ("\n-----------------        ---------------------------------------------------------------------------------        -----------------");
 		System.out.println(s);
-
 	}
+
+	private String[] getAtt() {
+		String[] s = new String[5];
+		for(int i = 0; i < 5; i++) {
+			if(monsterField[i].isEmpty()) {
+				s[i] = "ATK: ----";
+			}else {
+				MonsterCard mc = (MonsterCard) monsterField[i].getCard();
+				s[i] = "ATK: " + string2rightSize(4, ""+mc.getAtk());
+			}
+		}
+		return s;
+	}
+
+	private String[] getDef() {
+		String[] s = new String[5];
+		for(int i = 0; i < 5; i++) {
+			if(monsterField[i].isEmpty()) {
+				s[i] = "DEF: ----";
+			}else {
+				MonsterCard mc = (MonsterCard) monsterField[i].getCard();
+				s[i] = "DEF: " + string2rightSize(4, ""+mc.getDef());
+			}
+		}
+		return s;
+	}
+
+	private String string2rightSize(int size, String s) {
+		String ofset = "";
+		for(int i = 0; i < size - s.length(); i++) {
+			ofset += " ";
+		}
+		return ofset + s;
+	}
+	
 }
