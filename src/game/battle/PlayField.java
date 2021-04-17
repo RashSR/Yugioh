@@ -30,48 +30,55 @@ public class PlayField {
 			spellAndTrapField[i] = new FieldElement();
 		}
 	}
-	
+
 	public void playCard(int handIndex, CardMode cm, MonsterMode mm) {
 		Card card = player.getHandCardAt(handIndex);
 		int index;
 		if(card instanceof MonsterCard) {
-			index = getFreeIndex(monsterField);
-			if(index > -1) {
-				monsterField[index].setCard(card); 
-				monsterField[index].setOwner(player);
-				monsterField[index].setMonsterMode(mm);
-				monsterField[index].setCardMode(cm);
-				monsterField[index].setEmpty(false);
-				System.out.println("You played " + card.getName() + ".");
-				player.dropHandCard(handIndex);
+			if(player.getSummonCount() > 0) {
+				index = getFreeIndex(monsterField);
+				if(index > -1) {
+					playHelper(monsterField, card, cm, mm, index, handIndex);
+					player.setSummonCount(player.getSummonCount() - 1);
+				}
+			}else {
+				System.out.println("You only can summon one Monster each round.");
 			}
 		}else {
 			if(card instanceof SpellCard) {
 				SpellCard sc = (SpellCard) card;
 				if(sc.getSpellType() == SpellType.FELD) {
-					game.playFieldSpell(sc, player);
-					System.out.println("You played " + card.getName() + ".");
-					player.dropHandCard(handIndex);
+					playHelper(null, card, CardMode.FACE_UP, mm, -1, handIndex);
 					return;
 				}
 			}
 			index = getFreeIndex(spellAndTrapField);
 			if(index > -1) {
-				spellAndTrapField[index].setCard(card);
-				spellAndTrapField[index].setCardMode(cm);
-				spellAndTrapField[index].setEmpty(false);
-				System.out.println("You played " + card.getName() + ".");
-				player.dropHandCard(handIndex);
+				playHelper(spellAndTrapField, card, cm, mm, index, handIndex);
 			}
 		}
 	}
-	
+
+	private void playHelper(FieldElement[] arr, Card card, CardMode cm, MonsterMode mm, int index, int handIndex) {
+		if(arr == null) {
+			game.playFieldSpell((SpellCard)card, player);
+		}else {
+			arr[index].setCard(card); 
+			arr[index].setOwner(player);
+			arr[index].setMonsterMode(mm);
+			arr[index].setCardMode(cm);
+			arr[index].setEmpty(false);
+		}
+		System.out.println("You played " + card.getName() + ".");
+		player.dropHandCard(handIndex);
+	}
+
 	public void sendCardToGrave(int index) {
 		graveyard.add(player.getHandCardAt(index));
 		System.out.println(player.getName() + " dropped " + player.getHandCardAt(index).getName() + ".");
 		player.dropHandCard(index);
 	}
-	
+
 	public FusionMonster getFusionMonsterByName(String name) {
 		for(FusionMonster fm : fusionMonsters) {
 			if(name.equals(fm.getName())) {
@@ -126,7 +133,7 @@ public class PlayField {
 		}
 		return null;
 	}
-	
+
 	private boolean isEmpty(int row, int column) {
 		if(isValidFieldPos(row, column)) {
 			if(row == 0 && monsterField[column].isEmpty()) {
@@ -139,7 +146,7 @@ public class PlayField {
 		}
 		return false;
 	}
-	
+
 	private boolean isValidFieldPos(int row, int column) {
 		if(column > 4 || column < 0) {
 			System.out.println("[Playfield] column must be between 0 and 4.");
@@ -150,11 +157,11 @@ public class PlayField {
 		}
 		return true;
 	}
-	
+
 	public void setGame(Game game) {
 		this.game = game;
 	}
-	
+
 	public Card getSpellOrTrapCardAt(int index) {
 		return spellAndTrapField[index].getCard();
 	}
@@ -189,11 +196,11 @@ public class PlayField {
 		}
 		return true;
 	}
-	
+
 	public MonsterMode getMonsterModeAt() {
 		return null;
 	}
-	
+
 	public void print() {
 		String s = "";
 		String inUse = "   ";

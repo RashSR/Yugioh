@@ -13,6 +13,7 @@ public class Player {
 	private Deck deck;
 	private int totalGames;
 	private int wins;
+	private int summonCount = 0;
 
 	private ArrayList<Card> handCards = new ArrayList<>(); 
 
@@ -62,6 +63,14 @@ public class Player {
 		return null;
 	}
 	
+	public int getSummonCount() {
+		return summonCount;
+	}
+
+	public void setSummonCount(int summonCount) {
+		this.summonCount = summonCount;
+	}
+
 	public PlayField getPlayField() {
 		return this.playfield;
 	}

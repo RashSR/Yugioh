@@ -28,7 +28,6 @@ public class Main {
 	
 	public static PlayField testPlayField(Player p) {
 		PlayField pf = new PlayField(p);
-		pf.print();
 		return pf;
 	}
 	

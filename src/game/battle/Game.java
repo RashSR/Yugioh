@@ -15,6 +15,7 @@ public class Game {
 	private PlayField playField2;
 	private static final int START_LIFE_POINTS = 8000;
 	private static final int START_CARDS = 5;
+	private static final int DEFAULT_SUMMON_COUNT = 1;
 	private PlayPhase activePhase = PlayPhase.END;
 	private Player activePlayer;
 
@@ -142,6 +143,7 @@ public class Game {
 			activePlayer.drawCard();
 			nextPhase();
 		}else if(activePhase == PlayPhase.STANDBY) {
+			activePlayer.setSummonCount(DEFAULT_SUMMON_COUNT);
 			nextPhase();
 		}else if(activePhase == PlayPhase.END) {
 			endTurn();
