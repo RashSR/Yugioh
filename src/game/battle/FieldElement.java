@@ -14,6 +14,11 @@ public class FieldElement {
 		isEmpty = true;
 	}
 	
+	public FieldElement(Player owner) {
+		isEmpty = true;
+		this.owner = owner;
+	}
+	
 	public void changeCardMode() {
 		cm = cm.changeMode();
 	}

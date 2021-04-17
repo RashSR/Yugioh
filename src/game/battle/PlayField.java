@@ -1,6 +1,7 @@
 package game.battle;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import cards.Card;
 import cards.Deck;
@@ -38,8 +39,10 @@ public class PlayField {
 			if(player.getSummonCount() > 0) {
 				index = getFreeIndex(monsterField);
 				if(index > -1) {
-					playHelper(monsterField, card, cm, mm, index, handIndex);
-					player.setSummonCount(player.getSummonCount() - 1);
+					if(canBeSummoned(card)) {
+						playHelper(monsterField, card, cm, mm, index, handIndex);
+						player.setSummonCount(player.getSummonCount() - 1);
+					}
 				}
 			}else {
 				System.out.println("You only can summon one Monster each round.");
@@ -58,7 +61,50 @@ public class PlayField {
 			}
 		}
 	}
-
+	
+	private boolean canBeSummoned(Card card) {
+		MonsterCard monster = (MonsterCard) card;
+		int stars = monster.getStars();
+		if(stars == 5 || stars == 6) {
+			return tributeMonster(1);
+		}else if(stars == 7 || stars == 8) {
+			return tributeMonster(2);
+		}else if(stars == 9 || stars == 10) {
+			return tributeMonster(3);
+		}
+		return true;
+	}
+	
+	private boolean tributeMonster(int tributes) {
+		System.out.println("To summon the monster you need " + tributes + " Tributes.");
+		if(tributes == 1 && getOccupiedMonsterSlotCount() > 0) {
+			makeTribute(tributes);
+			return true;
+		}else if(tributes == 2 && getOccupiedMonsterSlotCount() > 1) {
+			makeTribute(tributes);
+			return true;
+		}else if(tributes == 3 && getOccupiedMonsterSlotCount() > 2) {
+			makeTribute(tributes);
+			return true;
+		}
+		System.out.println("You don't have enough Monster on the Field.");
+		return false;
+	}
+	
+	private void makeTribute(int tributes) {
+		Scanner sc = new Scanner(System.in);
+		for(int i = 0; i < tributes; i++) {
+			System.out.println("Choose Tribute " + (i+1) + ":");
+			int selection = sc.nextInt();
+			if(monsterField[selection].isEmpty()) {
+				System.out.println("Choose again!");
+				i--;
+			}else {
+				sendCardFromFieldToGrave(monsterField, selection);
+			}
+		}
+	}
+	
 	private void playHelper(FieldElement[] arr, Card card, CardMode cm, MonsterMode mm, int index, int handIndex) {
 		if(arr == null) {
 			game.playFieldSpell((SpellCard)card, player);
@@ -73,10 +119,16 @@ public class PlayField {
 		player.dropHandCard(handIndex);
 	}
 
-	public void sendCardToGrave(int index) {
+	public void sendCardFromHandToGrave(int index) {
 		graveyard.add(player.getHandCardAt(index));
 		System.out.println(player.getName() + " dropped " + player.getHandCardAt(index).getName() + ".");
 		player.dropHandCard(index);
+	}
+	
+	private void sendCardFromFieldToGrave(FieldElement[] arr, int index) {
+		graveyard.add(arr[index].getCard());
+		System.out.println(player.getName() + " send " + arr[index].getCard().getName() + " the to graveyard.");
+		arr[index] = new FieldElement(player);
 	}
 
 	public FusionMonster getFusionMonsterByName(String name) {
@@ -199,6 +251,16 @@ public class PlayField {
 
 	public MonsterMode getMonsterModeAt() {
 		return null;
+	}
+
+	private int getOccupiedMonsterSlotCount() {
+		int count = 0;
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	public void print() {

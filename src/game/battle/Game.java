@@ -161,7 +161,7 @@ public class Game {
 				Scanner sc = new Scanner(System.in);
 				index = sc.nextInt();
 			}
-			activePlayer.getPlayField().sendCardToGrave(index);
+			activePlayer.getPlayField().sendCardFromHandToGrave(index);
 			checkTooMuchCards();
 		}
 	}
