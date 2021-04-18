@@ -9,4 +9,13 @@ public enum MonsterMode {
 		}
 		return ATTACK;
 	}
+	
+	public String toString() {
+		String mode = "DEF";
+		if(this == ATTACK) {
+			mode = "ATK";
+		}
+		return mode;
+	}
+	
 }

@@ -9,4 +9,12 @@ public enum CardMode {
 		}
 		return FACE_UP;
 	}
+	
+	public String toString() {
+		String mode = "F_UP";
+		if(this == FACE_DOWN) {
+			mode = "F_DOWN";
+		}
+		return mode;
+	}
 }
