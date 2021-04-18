@@ -7,6 +7,7 @@ import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
 import cards.spell.SpellType;
 import game.Player;
+import game.map.FieldPrinter;
 
 public class Game {
 	private Player player1;
@@ -114,7 +115,7 @@ public class Game {
 				mm = MonsterMode.DEFENSE;
 				cm = CardMode.FACE_DOWN;
 			}
-		}else {
+		}else {//TODO Bei Fallenkarte z.B. nicht fragen.
 			System.out.println("Do you want to play your Card Face-Up(0) or Face-Down(1)?");
 			int cardMode = sc.nextInt();
 			if(cardMode == 0) {
@@ -154,7 +155,7 @@ public class Game {
 		if(activePlayer.getHand().size() > 6) {
 			int index = 0;
 			if(activePlayer.getName().equals("Computer")) {
-				
+				//TODO better AI to drop cards
 			}else {
 				System.out.println("You can only hold 6 Cards. Which one do you want do drop?");
 				activePlayer.showCards();

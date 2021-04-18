@@ -10,12 +10,14 @@ import cards.monster.fusion.FusionMonster;
 import cards.spell.SpellCard;
 import cards.spell.SpellType;
 import game.Player;
+import game.map.FieldPrinter;
 
 public class PlayField {
 	private Player player;
 	private Game game;
 	private SpellCard fieldSpell;
 	private Deck deck;
+	private FieldPrinter fieldPrinter;
 	private ArrayList<Card> graveyard = new ArrayList<>();
 	private FieldElement[] monsterField = new FieldElement[5];
 	private FieldElement[] spellAndTrapField = new FieldElement[5];
@@ -30,6 +32,7 @@ public class PlayField {
 			monsterField[i] = new FieldElement();
 			spellAndTrapField[i] = new FieldElement();
 		}
+		this.fieldPrinter = new FieldPrinter(this);
 	}
 
 	public void playCard(int handIndex, CardMode cm, MonsterMode mm) {
@@ -127,7 +130,7 @@ public class PlayField {
 
 	private void sendCardFromFieldToGrave(FieldElement[] arr, int index) {
 		graveyard.add(arr[index].getCard());
-		System.out.println(player.getName() + " send " + arr[index].getCard().getName() + " the to graveyard.");
+		System.out.println(player.getName() + " send " + arr[index].getCard().getName() + " to the graveyard.");
 		arr[index] = new FieldElement(player);
 	}
 
@@ -147,7 +150,7 @@ public class PlayField {
 				return i;
 			}
 		}
-		System.out.println("Wir sind bei -1");
+		System.out.println("There is no more space for this card at the field.");
 		return -1;
 	}
 
@@ -262,70 +265,21 @@ public class PlayField {
 		}
 		return count;
 	}
+	
+	public FieldElement[] getMonsterField() {
+		return monsterField;
+	}
+
+	public FieldElement[] getSpellAndTrapField() {
+		return spellAndTrapField;
+	}
+
+	public ArrayList<FusionMonster> getFusionMonsters() {
+		return fusionMonsters;
+	}
 
 	public void print() {
-		String s = "";
-		String inUse = "   ";
-		if(hasFieldSpell()) {
-			inUse = "USE";
-		}
-		String[] atk = getAtt();
-		String[] def = getDef();
-		s += ("\n_________________        _________________________________________________________________________________        _________________");
-		s += ("\n|               |        |               |               |               |               |               |        |               |");
-		s += ("\n|       ,       |        |   " + atk[0] + "   |   " + atk[1] + "   |   " + atk[2] + "   |   " + atk[3] + "   |   " + atk[4] + "   |        |               |");
-		s += ("\n|    __/ \\__    |        |   " + def[0] + "   |   " + def[1] + "   |   " + def[2] + "   |   " + def[3] + "   |   " + def[4] + "   |        |   Friedhof:   |");
-		s += ("\n|    \\ " + inUse +" /    |        |               |               |               |               |               |        |       " + graveyard.size() + "       |");
-		s += ("\n|    /_   _\\    |        |               |               |               |               |               |        |               |");
-		s += ("\n|      \\ /      |        |               |               |               |               |               |        |               |");
-		s += ("\n|       '       |        |               |               |               |               |               |        |               |");
-		s += ("\n|               |        |               |               |               |               |               |        |               |");
-		s += ("\n-----------------        |-------------------------------------------------------------------------------|        -----------------");
-		s += ("\n_________________        |_______________________________________________________________________________|        |_______________|");
-		s += ("\n|               |        |               |               |               |               |               |        |               |");
-		s += ("\n|               |        |               |               |               |               |               |        |               |");
-		s += ("\n|   Fusions-    |        |               |               |               |               |               |        |               |");
-		s += ("\n|   monster:    |        |               |               |               |               |               |        |               |");
-		s += ("\n|      " + fusionMonsters.size() + "        |        |               |               |               |               |               |        |     Deck:     |");
-		s += ("\n|               |        |               |               |               |               |               |        |      " + deck.getDeckCount() + "       |");
-		s += ("\n|               |        |               |               |               |               |               |        |               |");
-		s += ("\n|               |        |               |               |               |               |               |        |               |");
-		s += ("\n-----------------        ---------------------------------------------------------------------------------        -----------------");
-		System.out.println(s);
-	}
-
-	private String[] getAtt() {
-		String[] s = new String[5];
-		for(int i = 0; i < 5; i++) {
-			if(monsterField[i].isEmpty()) {
-				s[i] = "ATK: ----";
-			}else {
-				MonsterCard mc = (MonsterCard) monsterField[i].getCard();
-				s[i] = "ATK: " + string2rightSize(4, ""+mc.getAtk());
-			}
-		}
-		return s;
-	}
-
-	private String[] getDef() {
-		String[] s = new String[5];
-		for(int i = 0; i < 5; i++) {
-			if(monsterField[i].isEmpty()) {
-				s[i] = "DEF: ----";
-			}else {
-				MonsterCard mc = (MonsterCard) monsterField[i].getCard();
-				s[i] = "DEF: " + string2rightSize(4, ""+mc.getDef());
-			}
-		}
-		return s;
-	}
-
-	private String string2rightSize(int size, String s) {
-		String ofset = "";
-		for(int i = 0; i < size - s.length(); i++) {
-			ofset += " ";
-		}
-		return ofset + s;
+		fieldPrinter.printField();
 	}
 	
 }
