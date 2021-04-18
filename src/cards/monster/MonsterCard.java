@@ -89,8 +89,9 @@ public class MonsterCard extends Card{
 				return MonsterType.DONNER;
 			case "Gefluegeltes-Ungeheuer":
 				return MonsterType.GEFLUEGELTES_UNGEHEUER;
+			case "Seeschlange":
+				return MonsterType.SEESCHLANGE;
 		}
-		
 		return null;
 	}
 	
