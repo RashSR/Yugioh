@@ -6,6 +6,7 @@ import cards.Card;
 import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
 import cards.spell.SpellType;
+import cards.trap.TrapCard;
 import game.Player;
 import game.map.FieldPrinter;
 
@@ -100,31 +101,55 @@ public class Game {
 
 	private void playCard() {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Which Card you wanna play?");
-		int handIndex = sc.nextInt();
-		Card c = activePlayer.getHandCardAt(handIndex);
-		CardMode cm = null;
-		MonsterMode mm = null;
-		if(c instanceof MonsterCard) {
-			System.out.println("Do you want to play your Monster in ATK(0) or DEF(1) mode?");
-			int monsterMode = sc.nextInt();
-			if(monsterMode == 0) {
-				mm = MonsterMode.ATTACK;
-				cm = CardMode.FACE_UP;
-			}else {
-				mm = MonsterMode.DEFENSE;
-				cm = CardMode.FACE_DOWN;
+		int handCards = activePlayer.getHand().size();
+		if(handCards == 0) {
+			System.out.println("You don't have a Card in your hand.");
+		}else {
+			int handIndex = 0;
+			if(handCards > 1) {
+				System.out.println("Which Card you wanna play? (0 - " + (handCards-1) + ")");
+				handIndex = sc.nextInt();
 			}
-		}else {//TODO Bei Fallenkarte z.B. nicht fragen.
-			System.out.println("Do you want to play your Card Face-Up(0) or Face-Down(1)?");
-			int cardMode = sc.nextInt();
-			if(cardMode == 0) {
-				cm = CardMode.FACE_UP;
+			Card c = activePlayer.getHandCardAt(handIndex);
+			CardMode cm = null;
+			MonsterMode mm = null;
+			if(c instanceof MonsterCard) {
+				System.out.println("Do you want to play your Monster in ATK(0) or DEF(1) mode?");
+				int monsterMode = sc.nextInt();
+				if(monsterMode == 0) {
+					mm = MonsterMode.ATTACK;
+					cm = CardMode.FACE_UP;
+				}else {
+					mm = MonsterMode.DEFENSE;
+					cm = CardMode.FACE_DOWN;
+				}
 			}else {
-				cm = CardMode.FACE_DOWN;
+				cm = obviousCardMode(c);
+				if(cm == null) {
+					System.out.println("Do you want to play your Card Face-Up(0) or Face-Down(1)?");
+					int cardMode = sc.nextInt();
+					if(cardMode == 0) {
+						cm = CardMode.FACE_UP;
+					}else {
+						cm = CardMode.FACE_DOWN;
+					}
+				}
+			}
+			playField1.playCard(handIndex, cm, mm);
+		}
+	}
+
+	private CardMode obviousCardMode(Card card){
+		if(card instanceof TrapCard) {
+			return CardMode.FACE_DOWN;
+		}
+		if(card instanceof SpellCard) {
+			SpellCard c = (SpellCard) card;
+			if(c.getSpellType() == SpellType.FELD) {
+				return CardMode.FACE_UP;
 			}
 		}
-		playField1.playCard(handIndex, cm, mm);
+		return null;
 	}
 
 	private void endTurn() {
@@ -150,7 +175,7 @@ public class Game {
 			endTurn();
 		}
 	}
-	
+
 	private void checkTooMuchCards() {
 		if(activePlayer.getHand().size() > 6) {
 			int index = 0;
@@ -166,7 +191,7 @@ public class Game {
 			checkTooMuchCards();
 		}
 	}
-	
+
 	public void playFieldSpell(SpellCard fieldSpell, Player player) {
 		if(player.equals(player1)) {
 			if(playField2.hasFieldSpell()) {

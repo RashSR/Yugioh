@@ -17,9 +17,10 @@ public class FieldPrinter {
 
 	public void printField() {
 		String s = "";
-		String inUse = "   ";
+		String lp = "LP: " + string2rightSize(5, ""+playField.getPlayer().getLifePoints(), false);
+		String fieldName = "Name: -------";
 		if(playField.hasFieldSpell()) {
-			inUse = "USE";
+			fieldName = "Name: " + string2rightSize(7, playField.getFieldSpell().getName(), false);
 		}
 		String[] atk = getAtt();
 		String[] def = getDef();
@@ -29,14 +30,14 @@ public class FieldPrinter {
 		String[] t = getType();
 		
 		s += ("\n_________________        _________________________________________________________________________________        _________________");
-		s += ("\n|               |        |               |               |               |               |               |        |               |");
+		s += ("\n|   "+lp+"   |        |               |               |               |               |               |        |               |");
 		s += ("\n|       ,       |        |   " + atk[0] + "   |   " + atk[1] + "   |   " + atk[2] + "   |   " + atk[3] + "   |   " + atk[4] + "   |        |               |");
 		s += ("\n|    __/ \\__    |        |   " + def[0] + "   |   " + def[1] + "   |   " + def[2] + "   |   " + def[3] + "   |   " + def[4] + "   |        |   Friedhof:   |");
-		s += ("\n|    \\ " + inUse +" /    |        |               |               |               |               |               |        |       " + playField.getGraveyard().size() + "       |");
+		s += ("\n|    \\     /    |        |               |               |               |               |               |        |       " + playField.getGraveyard().size() + "       |");
 		s += ("\n|    /_   _\\    |        |   " + mm[0] + "    |   " + mm[1] + "    |   " + mm[2] + "    |   " + mm[3] + "    |   " + mm[4] + "    |        |               |");
 		s += ("\n|      \\ /      |        |  " + cm[0] + " |  " + cm[1] + " |  " + cm[2] + " |  " + cm[3] + " |  " + cm[4] + " |        |               |");
 		s += ("\n|       '       |        |               |               |               |               |               |        |               |");
-		s += ("\n|               |        |               |               |               |               |               |        |               |");
+		s += ("\n| " + fieldName + " |        |               |               |               |               |               |        |               |");
 		s += ("\n-----------------        |-------------------------------------------------------------------------------|        -----------------");
 		s += ("\n_________________        |_______________________________________________________________________________|        |_______________|");
 		s += ("\n|               |        |               |               |               |               |               |        |               |");

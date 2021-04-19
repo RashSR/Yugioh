@@ -81,19 +81,34 @@ public class PlayField {
 	private boolean tributeMonster(int tributes) {
 		System.out.println("To summon the monster you need " + tributes + " Tributes.");
 		if(tributes == 1 && getOccupiedMonsterSlotCount() > 0) {
-			makeTribute(tributes);
+			if(getOccupiedMonsterSlotCount() == 1) {
+				sendCardFromFieldToGrave(monsterField, getFreeTribute());
+			}else {
+				makeTribute(tributes);
+			}
 			return true;
 		}else if(tributes == 2 && getOccupiedMonsterSlotCount() > 1) {
-			makeTribute(tributes);
+			if(getOccupiedMonsterSlotCount() == 2) {
+				sendCardFromFieldToGrave(monsterField, getFreeTribute());
+				sendCardFromFieldToGrave(monsterField, getFreeTribute());
+			}else {
+				makeTribute(tributes);
+			}
 			return true;
 		}else if(tributes == 3 && getOccupiedMonsterSlotCount() > 2) {
-			makeTribute(tributes);
+			if(getOccupiedMonsterSlotCount() == 3) {
+				sendCardFromFieldToGrave(monsterField, getFreeTribute());
+				sendCardFromFieldToGrave(monsterField, getFreeTribute());
+				sendCardFromFieldToGrave(monsterField, getFreeTribute());	
+			}else {
+				makeTribute(tributes);
+			}
 			return true;
 		}
 		System.out.println("You don't have enough Monster on the Field.");
 		return false;
 	}
-
+	
 	private void makeTribute(int tributes) {
 		Scanner sc = new Scanner(System.in);
 		for(int i = 0; i < tributes; i++) {
@@ -106,6 +121,15 @@ public class PlayField {
 				sendCardFromFieldToGrave(monsterField, selection);
 			}
 		}
+	}
+	
+	private int getFreeTribute() {
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	private void playHelper(FieldElement[] arr, Card card, CardMode cm, MonsterMode mm, int index, int handIndex) {
@@ -280,6 +304,10 @@ public class PlayField {
 
 	public void print() {
 		fieldPrinter.printField();
+	}
+	
+	public SpellCard getFieldSpell() {
+		return this.fieldSpell;
 	}
 	
 }
