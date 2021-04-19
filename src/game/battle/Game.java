@@ -191,7 +191,7 @@ public class Game {
 			checkTooMuchCards();
 		}
 	}
-
+	//TODO: activate effect
 	public void playFieldSpell(SpellCard fieldSpell, Player player) {
 		if(player.equals(player1)) {
 			if(playField2.hasFieldSpell()) {

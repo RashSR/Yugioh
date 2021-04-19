@@ -144,6 +144,7 @@ public class PlayField {
 		}
 		System.out.println("You played " + card.getName() + ".");
 		player.dropHandCard(handIndex);
+		
 	}
 
 	public void sendCardFromHandToGrave(int index) {
