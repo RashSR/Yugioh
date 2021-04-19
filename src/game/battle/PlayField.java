@@ -10,6 +10,7 @@ import cards.monster.fusion.FusionMonster;
 import cards.spell.SpellCard;
 import cards.spell.SpellType;
 import game.Player;
+import game.effects.SpellEffects;
 import game.map.FieldPrinter;
 
 public class PlayField {
@@ -108,7 +109,7 @@ public class PlayField {
 		System.out.println("You don't have enough Monster on the Field.");
 		return false;
 	}
-	
+
 	private void makeTribute(int tributes) {
 		Scanner sc = new Scanner(System.in);
 		for(int i = 0; i < tributes; i++) {
@@ -122,7 +123,7 @@ public class PlayField {
 			}
 		}
 	}
-	
+
 	private int getFreeTribute() {
 		for(int i = 0; i < 5; i++) {
 			if(!monsterField[i].isEmpty()) {
@@ -144,7 +145,16 @@ public class PlayField {
 		}
 		System.out.println("You played " + card.getName() + ".");
 		player.dropHandCard(handIndex);
-		
+		if(card instanceof SpellCard && cm == CardMode.FACE_UP) {
+			activateSpellEffect((SpellCard)card, index);
+		}
+	}
+
+	private void activateSpellEffect(SpellCard sc, int index) {
+		SpellEffects.activateEffect(sc, this);
+		if(sc.getSpellType() == SpellType.NORMAL || sc.getSpellType() == SpellType.SCHNELL) {
+			sendCardFromFieldToGrave(spellAndTrapField, index);
+		}
 	}
 
 	public void sendCardFromHandToGrave(int index) {
@@ -168,7 +178,7 @@ public class PlayField {
 		}
 		return null;
 	}
-
+	
 	private int getFreeIndex(FieldElement[] arr) {
 		for(int i = 0; i < 5; i++) {
 			if(arr[i].isEmpty()) {
@@ -290,7 +300,7 @@ public class PlayField {
 		}
 		return count;
 	}
-	
+
 	public FieldElement[] getMonsterField() {
 		return monsterField;
 	}
@@ -306,9 +316,39 @@ public class PlayField {
 	public void print() {
 		fieldPrinter.printField();
 	}
-	
+
 	public SpellCard getFieldSpell() {
 		return this.fieldSpell;
 	}
+
+	public Game getGame() {
+		return this.game;
+	}
 	
+	public boolean hasGraveMonster() {
+		for(Card c : graveyard) {
+			if(c instanceof MonsterCard) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasFreeMonsterSpace() {
+		for(int i = 0; i < 5; i++) {
+			if(monsterField[i].isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void destroyAllMonster() {
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				sendCardFromFieldToGrave(monsterField, i);
+			}
+		}
+	}
+
 }

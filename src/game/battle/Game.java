@@ -18,6 +18,7 @@ public class Game {
 	private static final int START_LIFE_POINTS = 8000;
 	private static final int START_CARDS = 5;
 	private static final int DEFAULT_SUMMON_COUNT = 1;
+	private static final int HAND_CARD_LIMIT = 6;
 	private PlayPhase activePhase = PlayPhase.END;
 	private Player activePlayer;
 
@@ -154,7 +155,7 @@ public class Game {
 
 	private void endTurn() {
 		activePhase = PlayPhase.END;
-		checkTooMuchCards();
+		checkTooMuchCards(HAND_CARD_LIMIT);
 		nextPhase();
 	}
 
@@ -176,19 +177,19 @@ public class Game {
 		}
 	}
 
-	private void checkTooMuchCards() {
-		if(activePlayer.getHand().size() > 6) {
+	public void checkTooMuchCards(int amount) {
+		if(activePlayer.getHand().size() > amount) {
 			int index = 0;
 			if(activePlayer.getName().equals("Computer")) {
 				//TODO better AI to drop cards
 			}else {
-				System.out.println("You can only hold 6 Cards. Which one do you want do drop?");
+				System.out.println("You can only hold " + amount + " Cards. Which one do you want do drop?");
 				activePlayer.showCards();
 				Scanner sc = new Scanner(System.in);
 				index = sc.nextInt();
 			}
 			activePlayer.getPlayField().sendCardFromHandToGrave(index);
-			checkTooMuchCards();
+			checkTooMuchCards(amount);
 		}
 	}
 	//TODO: activate effect
@@ -248,7 +249,7 @@ public class Game {
 		p.setLifePoints(p.getLifePoints()-amount);
 	}
 
-	private Player getNotActivePlayer() {
+	public Player getNotActivePlayer() {
 		if(activePlayer.equals(player1)) {
 			return player2;
 		}
