@@ -40,9 +40,9 @@ public class PlayField {
 		int index;
 		if(card instanceof MonsterCard) {
 			if(player.getSummonCount() > 0) {
-				index = getFreeIndex(monsterField);
-				if(index > -1) {
-					if(canBeSummoned(card)) { //TODO Man soll auch etwas beschwören wenn Feld voll ist
+				if(canBeSummoned(card)) {
+					index = getFreeIndex(monsterField);
+					if(index > -1) {
 						playHelper(monsterField, card, cm, mm, index, handIndex);
 						player.setSummonCount(player.getSummonCount() - 1);
 					}
