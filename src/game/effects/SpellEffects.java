@@ -1,7 +1,15 @@
 package game.effects;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import cards.Card;
+import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
 import game.Player;
+import game.map.CardMode;
+import game.map.FieldElement;
+import game.map.MonsterMode;
 import game.map.PlayField;
 
 public class SpellEffects {
@@ -23,12 +31,7 @@ public class SpellEffects {
 			pf.getPlayer().setLifePoints(pf.getPlayer().getLifePoints() + 500);
 			break;
 		case "Wiedergeburt":
-			if(pf.getGame().getNotActivePlayer().getPlayField().hasGraveMonster() || pf.hasGraveMonster()) {
-				if(pf.hasFreeMonsterSpace()) {
-					System.out.println("You can summon a Monster from your Opponent");
-					//TODO: Auswahl geben
-				}
-			}
+			monsterReborn(pf);
 			break;
 		case "Schwarzes Loch":
 			pf.destroyAllMonster();
@@ -45,6 +48,62 @@ public class SpellEffects {
 			break;
 		default:
 			break;
+		}
+	}
+	//TODO make choice if only one
+	private static void monsterReborn(PlayField pf) {
+		if(pf.getGame().getNotActivePlayer().getPlayField().hasGraveMonster() || pf.hasGraveMonster()) {
+			if(pf.hasFreeMonsterSpace()) {
+				System.out.println("You can summon a Monster from your or your Opponents graveyard.");
+				ArrayList<MonsterCard> myGraveMonster = new ArrayList<>();
+				ArrayList<MonsterCard> opponentGraveMonster = new ArrayList<>();
+				for(Card c : pf.getGraveyard()) {
+					if(c instanceof MonsterCard) {
+						myGraveMonster.add((MonsterCard)c);
+					}
+				}
+				for(Card c : pf.getGame().getNotActivePlayer().getPlayField().getGraveyard()) {
+					if(c instanceof MonsterCard) {
+						opponentGraveMonster.add((MonsterCard)c);
+					}
+				}
+				if(myGraveMonster.size() > 0) {
+					System.out.println("Your Grave:");
+					int i = 0;
+					for(MonsterCard mc : myGraveMonster) {
+						System.out.println("Nr. " + i + ": " + mc);
+						i++;
+					}
+				}
+				if(opponentGraveMonster.size() > 0) {
+					int i = 0;
+					System.out.println("Opponents Grave:");
+					for(MonsterCard mc : opponentGraveMonster) {
+						System.out.println("Nr. " + i + ": " + mc);
+						i++;
+					}
+				}
+				Scanner sc = new Scanner(System.in);
+				System.out.println("Do you want your(0) Card or from your opponent(1)?");
+				int playerChoice = sc.nextInt();
+				System.out.println("Which Card do you want?");
+				int cardChoice = sc.nextInt();
+				System.out.println("Do you want to play the Monster in ATK(0) or DEF(1) mode?");
+				int monsterMode = sc.nextInt();
+				MonsterMode mm = MonsterMode.DEFENSE;
+				if(monsterMode == 0) {
+					mm = MonsterMode.ATTACK;
+				}
+				MonsterCard chosenMonster = null;
+				int index = pf.getFreeIndex(pf.getMonsterField());
+				if(playerChoice == 0) {
+					chosenMonster = myGraveMonster.get(cardChoice);
+					pf.getMonsterField()[index] = new FieldElement((Card)chosenMonster, pf.getPlayer(), mm, CardMode.FACE_UP, false);
+				}else {
+					chosenMonster = opponentGraveMonster.get(cardChoice);
+					pf.getMonsterField()[index] = new FieldElement((Card)chosenMonster, pf.getGame().getNotActivePlayer(), mm, CardMode.FACE_UP, false);
+				}
+			}
 		}
 	}
 

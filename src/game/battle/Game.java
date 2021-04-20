@@ -103,7 +103,8 @@ public class Game {
 			break;
 		}
 	}
-
+	//TODO fragen vor einer eingabe
+	
 	private void playCard() {
 		Scanner sc = new Scanner(System.in);
 		int handCards = activePlayer.getHand().size();

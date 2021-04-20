@@ -137,11 +137,7 @@ public class PlayField {
 		if(arr == null) {
 			playFieldSpell((SpellCard)card);
 		}else {
-			arr[index].setCard(card); 
-			arr[index].setOwner(player);
-			arr[index].setMonsterMode(mm);
-			arr[index].setCardMode(cm);
-			arr[index].setEmpty(false);
+			arr[index] = new FieldElement(card, player, mm, cm, false);
 		}
 		System.out.println("You played " + card.getName() + ".");
 		player.dropHandCard(handIndex);
@@ -164,20 +160,25 @@ public class PlayField {
 			sendCardFromFieldToGrave(spellAndTrapField, index);
 		}
 	}
-
+	//TODO: sent the Card to the right Grave
 	public void sendCardFromHandToGrave(int index) {
 		graveyard.add(player.getHandCardAt(index));
 		System.out.println(player.getName() + " dropped " + player.getHandCardAt(index).getName() + ".");
 		player.dropHandCard(index);
 	}
-
+	
 	private void sendCardFromFieldToGrave(FieldElement[] arr, int index) {
-		graveyard.add(arr[index].getCard());
-		System.out.println(player.getName() + " send " + arr[index].getCard().getName() + " to the graveyard.");
+		if(arr[index].getOwner().equals(player)) {
+			graveyard.add(arr[index].getCard());
+			System.out.println(player.getName() + " send " + arr[index].getCard().getName() + " to the graveyard.");
+		}else {
+			game.getNotActivePlayer().getPlayField().getGraveyard().add(arr[index].getCard());
+			System.out.println(player.getName() + " send " + arr[index].getCard().getName() + " to the opponents graveyard.");
+		}
 		arr[index] = new FieldElement(player);
 	}
 
-	private int getFreeIndex(FieldElement[] arr) {
+	public int getFreeIndex(FieldElement[] arr) {
 		for(int i = 0; i < 5; i++) {
 			if(arr[i].isEmpty()) {
 				return i;

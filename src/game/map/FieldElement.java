@@ -9,7 +9,15 @@ public class FieldElement {
 	private boolean isEmpty;
 	private Player owner;
 	private Card card;
-
+	
+	public FieldElement(Card card, Player owner, MonsterMode mm, CardMode cm, boolean isEmpty) {
+		this.card = card;
+		this.owner = owner;
+		this.mm = mm;
+		this.cm = cm;
+		this.isEmpty = isEmpty;
+	}
+	
 	public FieldElement() {
 		isEmpty = true;
 	}
