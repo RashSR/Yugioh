@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import cards.Card;
 import cards.Deck;
-import game.battle.PlayField;
+import game.map.PlayField;
 
 public class Player {
 	private String name;

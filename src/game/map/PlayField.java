@@ -1,4 +1,4 @@
-package game.battle;
+package game.map;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -10,8 +10,8 @@ import cards.monster.fusion.FusionMonster;
 import cards.spell.SpellCard;
 import cards.spell.SpellType;
 import game.Player;
+import game.battle.Game;
 import game.effects.SpellEffects;
-import game.map.FieldPrinter;
 
 public class PlayField {
 	private Player player;
@@ -135,7 +135,7 @@ public class PlayField {
 
 	private void playHelper(FieldElement[] arr, Card card, CardMode cm, MonsterMode mm, int index, int handIndex) {
 		if(arr == null) {
-			game.playFieldSpell((SpellCard)card, player);
+			playFieldSpell((SpellCard)card);
 		}else {
 			arr[index].setCard(card); 
 			arr[index].setOwner(player);
@@ -149,7 +149,15 @@ public class PlayField {
 			activateSpellEffect((SpellCard)card, index);
 		}
 	}
-
+	
+	public void playFieldSpell(SpellCard fieldSpell) {
+		PlayField otherSide = game.getNotActivePlayer().getPlayField();;
+		if(otherSide.hasFieldSpell()) {
+			otherSide.removeFieldSpell();
+		}
+		setFieldSpell(fieldSpell);
+	}
+	
 	private void activateSpellEffect(SpellCard sc, int index) {
 		SpellEffects.activateEffect(sc, this);
 		if(sc.getSpellType() == SpellType.NORMAL || sc.getSpellType() == SpellType.SCHNELL) {
@@ -169,16 +177,6 @@ public class PlayField {
 		arr[index] = new FieldElement(player);
 	}
 
-	public FusionMonster getFusionMonsterByName(String name) {
-		for(FusionMonster fm : fusionMonsters) {
-			if(name.equals(fm.getName())) {
-				fusionMonsters.remove(fm);
-				return fm;
-			}
-		}
-		return null;
-	}
-	
 	private int getFreeIndex(FieldElement[] arr) {
 		for(int i = 0; i < 5; i++) {
 			if(arr[i].isEmpty()) {

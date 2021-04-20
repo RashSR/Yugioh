@@ -1,4 +1,4 @@
-package game.battle;
+package game.map;
 
 import cards.Card;
 import game.Player;

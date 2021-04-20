@@ -3,10 +3,6 @@ package game.map;
 import cards.Card;
 import cards.monster.MonsterCard;
 import cards.trap.TrapCard;
-import game.battle.CardMode;
-import game.battle.FieldElement;
-import game.battle.MonsterMode;
-import game.battle.PlayField;
 
 public class FieldPrinter {
 	private PlayField playField;

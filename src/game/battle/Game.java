@@ -8,7 +8,11 @@ import cards.spell.SpellCard;
 import cards.spell.SpellType;
 import cards.trap.TrapCard;
 import game.Player;
+import game.map.CardMode;
+import game.map.FieldElement;
 import game.map.FieldPrinter;
+import game.map.MonsterMode;
+import game.map.PlayField;
 
 public class Game {
 	private Player player1;
@@ -191,62 +195,6 @@ public class Game {
 			activePlayer.getPlayField().sendCardFromHandToGrave(index);
 			checkTooMuchCards(amount);
 		}
-	}
-	//TODO: activate effect
-	public void playFieldSpell(SpellCard fieldSpell, Player player) {
-		if(player.equals(player1)) {
-			if(playField2.hasFieldSpell()) {
-				playField2.removeFieldSpell();
-			}
-			playField1.setFieldSpell(fieldSpell);
-		}else {
-			if(playField1.hasFieldSpell()) {
-				playField1.removeFieldSpell();
-			}
-			playField2.setFieldSpell(fieldSpell);
-		}
-	}
-
-	public void changeCardState(PlayField pf, int row, int col) {
-		pf.changeState(row, col);
-	}
-
-	public void attack(PlayField attPf, int attCol, PlayField defPf, int defCol) {
-		FieldElement attElement = attPf.getFieldElement(0, attCol);
-		FieldElement defElement = defPf.getFieldElement(0, defCol);
-		MonsterCard attacker = (MonsterCard) attElement.getCard();
-		MonsterCard defender = (MonsterCard) defElement.getCard();
-		int attATK = attacker.getAtk();
-		int defATK = defender.getAtk();
-		int defDEF = defender.getDef();
-		if(defElement.getMonsterMode() == MonsterMode.DEFENSE) {
-			if(attATK == defATK) {
-				sendCardToGrave(attacker);
-				sendCardToGrave(defender);
-			}else if(attATK < defATK) {
-				sendCardToGrave(attacker);
-				reduceLifePoints(activePlayer, defATK - attATK);
-			}else if(attATK > defATK) {
-				sendCardToGrave(defender);
-				reduceLifePoints(getNotActivePlayer(), attATK - defATK);
-			}
-		}else if(defElement.getMonsterMode() == MonsterMode.ATTACK) {
-			if(attATK > defDEF) {
-				sendCardToGrave(defender);
-			}else if(attATK < defDEF) {
-				reduceLifePoints(activePlayer, defDEF-attATK);
-			}else if(attATK == defDEF) {
-				System.out.println("Nothing happen.");
-			}	
-		}
-	}
-
-	private void sendCardToGrave(Card c) {
-		//TODO: send Cards to the Graveyard
-	}
-
-	private void reduceLifePoints(Player p, int amount) {
-		p.setLifePoints(p.getLifePoints()-amount);
 	}
 
 	public Player getNotActivePlayer() {

@@ -1,4 +1,4 @@
-package game.battle;
+package game.map;
 
 public enum CardMode {
 	FACE_UP, FACE_DOWN;

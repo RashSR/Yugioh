@@ -6,8 +6,8 @@ import database.player.PlayerExport;
 import database.player.PlayerImport;
 import game.Player;
 import game.battle.Game;
-import game.battle.PlayField;
 import game.battle.PlayPhase;
+import game.map.PlayField;
 import game.rockpaperscissors.*;
 
 public class Main {

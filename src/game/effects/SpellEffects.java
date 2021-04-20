@@ -2,7 +2,7 @@ package game.effects;
 
 import cards.spell.SpellCard;
 import game.Player;
-import game.battle.PlayField;
+import game.map.PlayField;
 
 public class SpellEffects {
 
@@ -23,7 +23,7 @@ public class SpellEffects {
 			pf.getPlayer().setLifePoints(pf.getPlayer().getLifePoints() + 500);
 			break;
 		case "Wiedergeburt":
-			if(pf.getGame().getNotActivePlayer().getPlayField().hasGraveMonster()) {
+			if(pf.getGame().getNotActivePlayer().getPlayField().hasGraveMonster() || pf.hasGraveMonster()) {
 				if(pf.hasFreeMonsterSpace()) {
 					System.out.println("You can summon a Monster from your Opponent");
 					//TODO: Auswahl geben

@@ -1,4 +1,4 @@
-package game.battle;
+package game.map;
 
 public enum MonsterMode {
 	ATTACK, DEFENSE;
