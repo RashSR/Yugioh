@@ -8,7 +8,7 @@ import game.Player;
 
 public class Deck {
 	private String pre = "[Deck] ";
-	private static final int MIN_CARD_LIMIT = 5;
+	private static final int MIN_CARD_LIMIT = 40;
 	private static final int MAX_CARD_LIMIT = 60;
 	private ArrayList<Card> cards;
 	private ArrayList<FusionMonster> fusionMonsters;

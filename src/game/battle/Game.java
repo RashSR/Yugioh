@@ -27,15 +27,19 @@ public class Game {
 	private Player activePlayer;
 
 	public Game(PlayField playField1, PlayField playField2) {
-		this.player1 = playField1.getPlayer();
-		this.player2 = playField2.getPlayer();
-		this.playField1 = playField1;
-		this.playField2 = playField2;
-		this.playField1.setGame(this);
-		this.playField2.setGame(this);
-		this.player1.setPlayField(playField1);
-		this.player2.setPlayField(playField2);
-		setupGame();
+		if(playField1.getPlayer().getDeck().isReady() && playField2.getPlayer().getDeck().isReady()) {
+			this.player1 = playField1.getPlayer();
+			this.player2 = playField2.getPlayer();
+			this.playField1 = playField1;
+			this.playField2 = playField2;
+			this.playField1.setGame(this);
+			this.playField2.setGame(this);
+			this.player1.setPlayField(playField1);
+			this.player2.setPlayField(playField2);
+			setupGame();
+		}else {
+			System.out.println("Your Decks are not ready.");
+		}
 	}
 
 	private void setupGame() {
@@ -104,7 +108,7 @@ public class Game {
 		}
 	}
 	//TODO fragen vor einer eingabe
-	
+
 	private void playCard() {
 		Scanner sc = new Scanner(System.in);
 		int handCards = activePlayer.getHand().size();

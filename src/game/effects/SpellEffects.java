@@ -85,9 +85,27 @@ public class SpellEffects {
 				}
 				Scanner sc = new Scanner(System.in);
 				System.out.println("Do you want your(0) Card or from your opponent(1)?");
-				int playerChoice = sc.nextInt();
+				int playerChoice;
+				if(myGraveMonster.size() == 0) {
+					System.out.println("Only your opponent got Monster at the graveyard.");
+					playerChoice = 1;
+				}else if(opponentGraveMonster.size() == 0) {
+					System.out.println("Only you have Monster at the graveyard.");
+					playerChoice = 0;
+				}else {
+					playerChoice = sc.nextInt();
+				}
 				System.out.println("Which Card do you want?");
-				int cardChoice = sc.nextInt();
+				int cardChoice;
+				if(playerChoice == 1 && opponentGraveMonster.size() == 1) {
+					System.out.println("Your opponent got only one Monster at the graveyard.");
+					cardChoice = 0;
+				}else if(playerChoice == 0 && myGraveMonster.size() == 1) {
+					System.out.println("You have only one Monster at the graveyard.");
+					cardChoice = 0;
+				}else {
+					cardChoice = sc.nextInt();
+				}
 				System.out.println("Do you want to play the Monster in ATK(0) or DEF(1) mode?");
 				int monsterMode = sc.nextInt();
 				MonsterMode mm = MonsterMode.DEFENSE;
@@ -99,9 +117,11 @@ public class SpellEffects {
 				if(playerChoice == 0) {
 					chosenMonster = myGraveMonster.get(cardChoice);
 					pf.getMonsterField()[index] = new FieldElement((Card)chosenMonster, pf.getPlayer(), mm, CardMode.FACE_UP, false);
+					pf.getGraveyard().remove(chosenMonster);
 				}else {
 					chosenMonster = opponentGraveMonster.get(cardChoice);
 					pf.getMonsterField()[index] = new FieldElement((Card)chosenMonster, pf.getGame().getNotActivePlayer(), mm, CardMode.FACE_UP, false);
+					pf.getGame().getNotActivePlayer().getPlayField().getGraveyard().remove(chosenMonster);
 				}
 			}
 		}
