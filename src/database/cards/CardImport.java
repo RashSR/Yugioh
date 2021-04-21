@@ -216,4 +216,30 @@ public class CardImport {
 		Collections.shuffle(cards);
 		return cards.get(rand.nextInt(cards.size()));
 	}
+	
+	public static Card getCardByName(String name) {
+		for(Card c : getAllImportedCards()) {
+			if(c.getName().equals(name)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public static ArrayList<Card> getAllImportedCards(){
+		ArrayList<Card> cards = new ArrayList<>();
+		for(Card c : monsterCards) {
+			cards.add(c);
+		}
+		for(Card c : spellCards) {
+			cards.add(c);
+		}
+		for(Card c : trapCards) {
+			cards.add(c);
+		}
+		for(Card c : fusionMonsters) {
+			cards.add(c);
+		}
+		return cards;
+	}
 }
