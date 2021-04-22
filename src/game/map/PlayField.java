@@ -145,15 +145,18 @@ public class PlayField {
 			activateSpellEffect((SpellCard)card, index);
 		}
 	}
-	
+
 	public void playFieldSpell(SpellCard fieldSpell) {
 		PlayField otherSide = game.getNotActivePlayer().getPlayField();;
 		if(otherSide.hasFieldSpell()) {
+			otherSide.getGraveyard().add(otherSide.getFieldSpell());
 			otherSide.removeFieldSpell();
+		}else if(hasFieldSpell()) {
+			graveyard.add(fieldSpell);
 		}
 		setFieldSpell(fieldSpell);
 	}
-	
+
 	private void activateSpellEffect(SpellCard sc, int index) {
 		SpellEffects.activateEffect(sc, this);
 		if(sc.getSpellType() == SpellType.NORMAL || sc.getSpellType() == SpellType.SCHNELL) {
@@ -166,7 +169,7 @@ public class PlayField {
 		System.out.println(player.getName() + " dropped " + player.getHandCardAt(index).getName() + ".");
 		player.dropHandCard(index);
 	}
-	
+
 	private void sendCardFromFieldToGrave(FieldElement[] arr, int index) {
 		if(arr[index].getOwner().equals(player)) {
 			graveyard.add(arr[index].getCard());
@@ -323,7 +326,7 @@ public class PlayField {
 	public Game getGame() {
 		return this.game;
 	}
-	
+
 	public boolean hasGraveMonster() {
 		for(Card c : graveyard) {
 			if(c instanceof MonsterCard) {
@@ -332,7 +335,7 @@ public class PlayField {
 		}
 		return false;
 	}
-	
+
 	public boolean hasFreeMonsterSpace() {
 		for(int i = 0; i < 5; i++) {
 			if(monsterField[i].isEmpty()) {
@@ -341,7 +344,7 @@ public class PlayField {
 		}
 		return false;
 	}
-	
+
 	public void destroyAllMonster() {
 		for(int i = 0; i < 5; i++) {
 			if(!monsterField[i].isEmpty()) {

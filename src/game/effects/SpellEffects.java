@@ -46,11 +46,19 @@ public class SpellEffects {
 			pf.getPlayer().drawCard();
 			pf.getGame().checkTooMuchCards(pf.getPlayer().getHand().size() - 2);
 			break;
+		case "Fluchzerstörer":
+			deSpell();
+			//Zerstört eine Zauberkarte auf dem Spielfeld. Wenn das Ziel dieser Karte verdeckt ist, decke die entsprechende Karte auf. Ist die Karte eine Zauberkarte, wird sie zerstört. Ist dies nicht der Fall, wird sie wieder umgedreht. Eine so aufgedeckte Karte wird nicht aktiviert.)
+			break;
 		default:
 			break;
 		}
 	}
-	//TODO make choice if only one
+	
+	private static void deSpell() {
+		
+	}
+	
 	private static void monsterReborn(PlayField pf) {
 		if(pf.getGame().getNotActivePlayer().getPlayField().hasGraveMonster() || pf.hasGraveMonster()) {
 			if(pf.hasFreeMonsterSpace()) {
@@ -132,7 +140,6 @@ public class SpellEffects {
 	/*
 		Yami (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Unterweltler und Hexer um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Type Fee um 200.)
 		Schwert der dunklen Zerstörung (type: AUSRÜSTUNG, text: Ein FINSTERNIS Monster, das mit dieser Karte ausgerüstet wird, erhöht seine ATK um 400 Punkte und verringert seine DEF um 200 Punkte.)
-		Fluchzerstörer (type: NORMAL, text: Zerstört eine Zauberkarte auf dem Spielfeld. Wenn das Ziel dieser Karte verdeckt ist, decke die entsprechende Karte auf. Ist die Karte eine Zauberkarte, wird sie zerstört. Ist dies nicht der Fall, wird sie wieder umgedreht. Eine so aufgedeckte Karte wird nicht aktiviert.)
 		Sogen (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Ungeheuer-Krieger und Krieger um 200 Punkte.)
 		Umi (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Fisch, Seeschlange, Donner und Aqua um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Typ Maschine und Pyro um 200 Punkte.)
 		Berg (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Drache, Gefluegeltes-Ungeheuer und Donner um 200 Punkte.)

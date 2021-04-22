@@ -58,7 +58,8 @@ public class Game {
 		nextPhase();
 		while(player1.getLifePoints() > 0 && player2.getLifePoints() > 0) {
 			if(activePlayer.equals(player2)) {
-				endTurn();
+				//endTurn();
+				chooseOption();
 			}else {
 				chooseOption();
 			}
@@ -101,7 +102,7 @@ public class Game {
 			activePlayer.showCards();
 			break;
 		case "F":
-			playField1.print();
+			activePlayer.getPlayField().print();
 			break;
 		default:
 			break;
@@ -145,7 +146,7 @@ public class Game {
 					}
 				}
 			}
-			playField1.playCard(handIndex, cm, mm);
+			activePlayer.getPlayField().playCard(handIndex, cm, mm);
 		}
 	}
 
