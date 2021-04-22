@@ -17,7 +17,7 @@ public class Main {
 		Player rash = PlayerImport.getPlayerFromName("Rash");
 		Player computer = PlayerImport.getPlayerFromName("Computer");
 		testCardImport();
-		Deck rashDeck = testDeck(37);
+		Deck rashDeck = testDeck(40);
 		rash.setDeck(rashDeck);
 		PlayField rashField = testPlayField(rash);
 		Deck computerDeck = testDeck(40);
