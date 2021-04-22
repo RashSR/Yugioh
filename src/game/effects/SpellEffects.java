@@ -47,7 +47,7 @@ public class SpellEffects {
 			pf.getGame().checkTooMuchCards(pf.getPlayer().getHand().size() - 2);
 			break;
 		case "Fluchzerstörer":
-			deSpell();
+			deSpell(pf);
 			//Zerstört eine Zauberkarte auf dem Spielfeld. Wenn das Ziel dieser Karte verdeckt ist, decke die entsprechende Karte auf. Ist die Karte eine Zauberkarte, wird sie zerstört. Ist dies nicht der Fall, wird sie wieder umgedreht. Eine so aufgedeckte Karte wird nicht aktiviert.)
 			break;
 		default:
@@ -55,8 +55,26 @@ public class SpellEffects {
 		}
 	}
 	
-	private static void deSpell() {
-		
+	private static void deSpell(PlayField pf) {
+		System.out.println("Do you want to destroy one of your(0) Spell-Cards or from your Opponent(1)?");
+		Scanner sc = new Scanner(System.in);
+		int playerChoice = sc.nextInt();
+		System.out.println("Which Spell-Card do you want to destroy?");
+		int cardChoice = sc.nextInt();
+		Card c = null;
+		//TODO: FieldSPell = 5
+		if(playerChoice == 0) {
+			c = pf.getCardAt(1, cardChoice);
+			if(c instanceof SpellCard) {
+				pf.sendCardFromFieldToGrave(pf.getSpellAndTrapField(), cardChoice);
+			}
+		}else {
+			PlayField opponentField = pf.getGame().getNotActivePlayer().getPlayField();
+			c = opponentField.getCardAt(1, cardChoice);
+			if(c instanceof SpellCard) {
+				opponentField.sendCardFromFieldToGrave(opponentField.getSpellAndTrapField(), cardChoice);
+			}
+		}
 	}
 	
 	private static void monsterReborn(PlayField pf) {

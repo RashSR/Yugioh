@@ -170,7 +170,7 @@ public class PlayField {
 		player.dropHandCard(index);
 	}
 
-	private void sendCardFromFieldToGrave(FieldElement[] arr, int index) {
+	public void sendCardFromFieldToGrave(FieldElement[] arr, int index) {
 		if(arr[index].getOwner().equals(player)) {
 			graveyard.add(arr[index].getCard());
 			System.out.println(player.getName() + " send " + arr[index].getCard().getName() + " to the graveyard.");

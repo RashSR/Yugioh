@@ -17,10 +17,10 @@ public class Main {
 		Player rash = PlayerImport.getPlayerFromName("Rash");
 		Player computer = PlayerImport.getPlayerFromName("Computer");
 		testCardImport();
-		Deck rashDeck = testDeck(40);
+		Deck rashDeck = testDeck(38);
 		rash.setDeck(rashDeck);
 		PlayField rashField = testPlayField(rash);
-		Deck computerDeck = testDeck(40);
+		Deck computerDeck = testDeck(38);
 		computer.setDeck(computerDeck);
 		PlayField computerField = testPlayField(computer);
 		Game g = new Game(rashField, computerField);
@@ -61,10 +61,10 @@ public class Main {
 			}
 			d.addToDeck(c);
 		}
-		if(cardLimit == 37) {
-			d.addToDeck(CardImport.getCardByName("Wiedergeburt"));
-			d.addToDeck(CardImport.getCardByName("Wiedergeburt"));
-			d.addToDeck(CardImport.getCardByName("Wiedergeburt"));
+		if(cardLimit >= 37) {
+			d.addToDeck(CardImport.getCardByName("Fluchzerstörer"));
+			d.addToDeck(CardImport.getCardByName("Fluchzerstörer"));
+			d.addToDeck(CardImport.getCardByName("Fluchzerstörer"));
 		}
 		d.finishDeck();
 		d.printDeck();
