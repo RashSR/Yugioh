@@ -16,7 +16,7 @@ import game.effects.SpellEffects;
 public class PlayField {
 	private Player player;
 	private Game game;
-	private SpellCard fieldSpell;
+	private SpellCard fieldSpell; //TODO: evtl auch als FieldElement
 	private Deck deck;
 	private FieldPrinter fieldPrinter;
 	private ArrayList<Card> graveyard = new ArrayList<>();
@@ -147,12 +147,11 @@ public class PlayField {
 	}
 
 	public void playFieldSpell(SpellCard fieldSpell) {
-		PlayField otherSide = game.getNotActivePlayer().getPlayField();;
+		PlayField otherSide = game.getNotActivePlayer().getPlayField();
 		if(otherSide.hasFieldSpell()) {
-			otherSide.getGraveyard().add(otherSide.getFieldSpell());
 			otherSide.removeFieldSpell();
 		}else if(hasFieldSpell()) {
-			graveyard.add(fieldSpell);
+			removeFieldSpell();
 		}
 		setFieldSpell(fieldSpell);
 	}
@@ -279,6 +278,9 @@ public class PlayField {
 	}
 
 	public void removeFieldSpell() {
+		if(hasFieldSpell()) {
+			graveyard.add(fieldSpell);
+		}
 		this.fieldSpell = null;
 	}
 
@@ -287,6 +289,51 @@ public class PlayField {
 			return false;
 		}
 		return true;
+	}
+
+	public boolean containsSpellCard() {
+		if(hasFieldSpell()) {
+			return true;
+		}
+		for(int i = 0; i < 5; i++) {
+			if(!spellAndTrapField[i].isEmpty()) {
+				if(spellAndTrapField[i].getCard() instanceof SpellCard) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public int getOnlySpellIndex(){
+		int index = -1;
+		if(hasFieldSpell()) {
+			return 5;
+		}
+		for(int i = 0; i < 5; i++) {
+			if(!spellAndTrapField[i].isEmpty()) {
+				if(spellAndTrapField[i].getCard() instanceof SpellCard) {
+					return i;
+				}
+			}
+		}
+
+		return index;
+	}
+
+	public int getSpellCount() {
+		int count = 0;
+		for(int i = 0; i < 5; i++) {
+			if(!spellAndTrapField[i].isEmpty()) {
+				if(spellAndTrapField[i].getCard() instanceof SpellCard) {
+					count++;
+				}
+			}
+		}
+		if(hasFieldSpell()) {
+			count++;
+		}
+		return count;
 	}
 
 	public MonsterMode getMonsterModeAt() {

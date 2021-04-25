@@ -13,7 +13,7 @@ import game.map.MonsterMode;
 import game.map.PlayField;
 
 public class SpellEffects {
-
+	//TODO: Ausspielvorausetzungen festlegen
 	public static void activateEffect(SpellCard sc, PlayField pf) {
 		switch (sc.getName()) {
 		case "Topf der Gier":
@@ -48,35 +48,93 @@ public class SpellEffects {
 			break;
 		case "Fluchzerstörer":
 			deSpell(pf);
-			//Zerstört eine Zauberkarte auf dem Spielfeld. Wenn das Ziel dieser Karte verdeckt ist, decke die entsprechende Karte auf. Ist die Karte eine Zauberkarte, wird sie zerstört. Ist dies nicht der Fall, wird sie wieder umgedreht. Eine so aufgedeckte Karte wird nicht aktiviert.)
 			break;
 		default:
 			break;
 		}
 	}
-	
+	//TODO soll nicht nur aktivierbar sein wenn Zauberkarten vorhanden sind!
+	//TODO Aktuelle karte soll nicht mitgezählt werden
 	private static void deSpell(PlayField pf) {
-		System.out.println("Do you want to destroy one of your(0) Spell-Cards or from your Opponent(1)?");
-		Scanner sc = new Scanner(System.in);
-		int playerChoice = sc.nextInt();
-		System.out.println("Which Spell-Card do you want to destroy?");
-		int cardChoice = sc.nextInt();
-		Card c = null;
-		//TODO: FieldSPell = 5
-		if(playerChoice == 0) {
-			c = pf.getCardAt(1, cardChoice);
-			if(c instanceof SpellCard) {
-				pf.sendCardFromFieldToGrave(pf.getSpellAndTrapField(), cardChoice);
-			}
-		}else {
-			PlayField opponentField = pf.getGame().getNotActivePlayer().getPlayField();
-			c = opponentField.getCardAt(1, cardChoice);
-			if(c instanceof SpellCard) {
-				opponentField.sendCardFromFieldToGrave(opponentField.getSpellAndTrapField(), cardChoice);
+		PlayField opponentField = pf.getGame().getNotActivePlayer().getPlayField();
+		System.out.println("You can destroy a Spell-Card from your or your Opponents playfield.");
+		if(pf.containsSpellCard()) {
+			System.out.println("Your side: ");
+			for(int i = 0; i < 6; i++) {
+				if(i < 5 && !pf.getFieldElement(1, i).isEmpty()) {
+					String cardName = pf.getCardAt(1, i).getName();
+					if(!(cardName.equals("Fluchzerstörer") && pf.getFieldElement(1, i).getCardMode() == CardMode.FACE_UP)) {
+						System.out.println(i + ": " + cardName);
+					}
+				}
+				else if(i == 5){
+					if(pf.hasFieldSpell()) {
+						System.out.println(i+": " + pf.getFieldSpell().getName());
+					}
+				}
 			}
 		}
+		if(opponentField.containsSpellCard()) {
+			System.out.println("Opponents side: ");
+			for(int i = 0; i < 6; i++) {
+				if(i < 5 && !opponentField.getFieldElement(1, i).isEmpty()) {
+					System.out.println(i + ": " + opponentField.getCardAt(1, i).getName());
+				}
+				else if(i == 5){
+					if(opponentField.hasFieldSpell()) {
+						System.out.println(i+": " + opponentField.getFieldSpell().getName());
+					}
+				}
+			}
+		}
+		System.out.println("Do you want to destroy one of your(0) Spell-Cards or from your Opponent(1)?");
+		Scanner sc = new Scanner(System.in);
+		int playerChoice;
+		if(pf.getSpellCount() > 1 || opponentField.containsSpellCard()) {
+			if(pf.getSpellCount() <= 1) {
+				playerChoice = 1;
+				System.out.println("Only your opponent has Spell-Cards.");
+			}else if(!opponentField.containsSpellCard()){
+				playerChoice = 0;
+				System.out.println("Only you have Spell-Cards.");
+			}else {
+				playerChoice = sc.nextInt();
+			}
+			System.out.println("Which Spell-Card do you want to destroy?");
+			int cardChoice;
+			if(playerChoice == 0 && pf.getSpellCount() == 2) {
+				System.out.println("You only have one Spell-Card.");
+				cardChoice = pf.getOnlySpellIndex();
+			}else if(playerChoice == 1 && opponentField.getSpellCount() == 1) {
+				System.out.println("Your opponent only has one Spell-Card.");
+				cardChoice = opponentField.getOnlySpellIndex();
+			}else {
+				cardChoice = sc.nextInt();
+			}
+			Card c = null;
+			if(playerChoice == 0) {
+				if(cardChoice == 5) {
+					pf.removeFieldSpell();
+				}else {
+					c = pf.getCardAt(1, cardChoice);
+					if(c instanceof SpellCard) {
+						pf.sendCardFromFieldToGrave(pf.getSpellAndTrapField(), cardChoice);
+					}
+				}
+			}else {
+				if(cardChoice == 5) {
+					opponentField.removeFieldSpell();
+				}else {
+					c = opponentField.getCardAt(1, cardChoice);
+					if(c instanceof SpellCard) {
+						opponentField.sendCardFromFieldToGrave(opponentField.getSpellAndTrapField(), cardChoice);
+					}
+				}
+			}
+		}
+
 	}
-	
+
 	private static void monsterReborn(PlayField pf) {
 		if(pf.getGame().getNotActivePlayer().getPlayField().hasGraveMonster() || pf.hasGraveMonster()) {
 			if(pf.hasFreeMonsterSpace()) {
