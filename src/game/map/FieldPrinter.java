@@ -15,25 +15,28 @@ public class FieldPrinter {
 	//TODO wenn weniger als 10 Karten im Deck bzw mehr als 9 im Friedhof verschiebt sich das Feld
 	public void printField() {
 		ArrayList<String > s = new ArrayList<>();
-		PlayField oppnentField = playField.getGame().getNotActivePlayer().getPlayField();
-		String lp = "LP: " + string2rightSize(5, ""+oppnentField.getPlayer().getLifePoints(), false);
+		PlayField opponentField = playField.getGame().getNotActivePlayer().getPlayField();
+		String lp = "LP: " + string2rightSize(5, ""+opponentField.getPlayer().getLifePoints(), false);
 		String fieldName = "Name: -------";
-		if(oppnentField.hasFieldSpell()) {
-			fieldName = "Name: " + string2rightSize(7, oppnentField.getFieldSpell().getName(), false);
+		if(opponentField.hasFieldSpell()) {
+			fieldName = "Name: " + string2rightSize(7, opponentField.getFieldSpell().getName(), false);
 		}
-		String[] atk = getAtt(oppnentField);
-		String[] def = getDef(oppnentField);
-		String[] mm = getMonsterMode(oppnentField);
-		String[] cm = getCardMode(oppnentField.getMonsterField());
-		String[] c = getCardMode(oppnentField.getSpellAndTrapField());
-		String[] t = getType(oppnentField);
+		String deckCount = string2rightSize(2, ""+opponentField.getDeckCount(), true);
+		String graveYardCount = string2rightSize(2, ""+opponentField.getGraveyard().size(), true);
+		String fusionMonsterCount = string2rightSize(2, ""+opponentField.getFusionMonsters().size(), true);
+		String[] atk = getAtt(opponentField);
+		String[] def = getDef(opponentField);
+		String[] mm = getMonsterMode(opponentField);
+		String[] cm = getCardMode(opponentField.getMonsterField());
+		String[] c = getCardMode(opponentField.getSpellAndTrapField());
+		String[] t = getType(opponentField);
 		
 		s.add("-----------------        _________________________________________________________________________________        -----------------");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |  " + t[0] + "  |  " + t[1] + "  |  " + t[2] + "  |  " + t[3] + "  |  " + t[4] + "  |        |   Fusions-    |");
 		s.add("|     Deck:     |        |  " + c[0] + " |  " + c[1] + " |  " + c[2] + " |  " + c[3] + " |  " + c[4] + " |        |   monster:    |");
-		s.add("|      " + oppnentField.getDeckCount() + "       |        |               |               |               |               |               |        |      " + oppnentField.getFusionMonsters().size() + "        |");
+		s.add("|      " + deckCount + "       |        |               |               |               |               |               |        |      " + fusionMonsterCount + "        |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
@@ -42,7 +45,7 @@ public class FieldPrinter {
 		s.add("|               |        |               |               |               |               |               |        |   "+lp+"   |");
 		s.add("|               |        |   " + atk[0] + "   |   " + atk[1] + "   |   " + atk[2] + "   |   " + atk[3] + "   |   " + atk[4] + "   |        |       ,       |");
 		s.add("|   Friedhof:   |        |   " + def[0] + "   |   " + def[1] + "   |   " + def[2] + "   |   " + def[3] + "   |   " + def[4] + "   |        |    __/ \\__    |");
-		s.add("|       " + oppnentField.getGraveyard().size() + "       |        |               |               |               |               |               |        |    \\     /    |");
+		s.add("|      " + graveYardCount + "       |        |               |               |               |               |               |        |    \\     /    |");
 		s.add("|               |        |   " + mm[0] + "    |   " + mm[1] + "    |   " + mm[2] + "    |   " + mm[3] + "    |   " + mm[4] + "    |        |    /_   _\\    |");
 		s.add("|               |        |  " + cm[0] + " |  " + cm[1] + " |  " + cm[2] + " |  " + cm[3] + " |  " + cm[4] + " |        |      \\ /      |");
 		s.add("|               |        |               |               |               |               |               |        |       '       |");
@@ -53,7 +56,10 @@ public class FieldPrinter {
 		if(playField.hasFieldSpell()) {
 			fieldName = "Name: " + string2rightSize(7, playField.getFieldSpell().getName(), false);
 		}
+		graveYardCount = string2rightSize(2, ""+playField.getGraveyard().size(), true);
+		deckCount = string2rightSize(2, ""+playField.getDeckCount(), true);
 		lp = "LP: " + string2rightSize(5, ""+playField.getPlayer().getLifePoints(), false);
+		fusionMonsterCount = string2rightSize(2, ""+playField.getFusionMonsters().size(), true);
 		atk = getAtt(playField);
 		def = getDef(playField);
 		mm = getMonsterMode(playField);
@@ -65,7 +71,7 @@ public class FieldPrinter {
 		s.add("|   "+lp+"   |        |               |               |               |               |               |        |               |");
 		s.add("|       ,       |        |   " + atk[0] + "   |   " + atk[1] + "   |   " + atk[2] + "   |   " + atk[3] + "   |   " + atk[4] + "   |        |               |");
 		s.add("|    __/ \\__    |        |   " + def[0] + "   |   " + def[1] + "   |   " + def[2] + "   |   " + def[3] + "   |   " + def[4] + "   |        |   Friedhof:   |");
-		s.add("|    \\     /    |        |               |               |               |               |               |        |       " + playField.getGraveyard().size() + "       |");
+		s.add("|    \\     /    |        |               |               |               |               |               |        |      " + graveYardCount + "       |");
 		s.add("|    /_   _\\    |        |   " + mm[0] + "    |   " + mm[1] + "    |   " + mm[2] + "    |   " + mm[3] + "    |   " + mm[4] + "    |        |               |");
 		s.add("|      \\ /      |        |  " + cm[0] + " |  " + cm[1] + " |  " + cm[2] + " |  " + cm[3] + " |  " + cm[4] + " |        |               |");
 		s.add("|       '       |        |               |               |               |               |               |        |               |");
@@ -77,7 +83,7 @@ public class FieldPrinter {
 		s.add("|   Fusions-    |        |  " + t[0] + "  |  " + t[1] + "  |  " + t[2] + "  |  " + t[3] + "  |  " + t[4] + "  |        |               |");
 		s.add("|   monster:    |        |  " + c[0] + " |  " + c[1] + " |  " + c[2] + " |  " + c[3] + " |  " + c[4] + " |        |               |");
 		s.add("|      " + playField.getFusionMonsters().size() + "        |        |               |               |               |               |               |        |     Deck:     |");
-		s.add("|               |        |               |               |               |               |               |        |      " + playField.getDeckCount() + "       |");
+		s.add("|               |        |               |               |               |               |               |        |      " + deckCount + "       |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("-----------------        ---------------------------------------------------------------------------------        -----------------");	
