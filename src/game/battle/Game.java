@@ -1,7 +1,6 @@
 package game.battle;
 
 import java.util.Scanner;
-
 import cards.Card;
 import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
@@ -9,11 +8,10 @@ import cards.spell.SpellType;
 import cards.trap.TrapCard;
 import game.Player;
 import game.map.CardMode;
-import game.map.FieldElement;
-import game.map.FieldPrinter;
 import game.map.MonsterMode;
 import game.map.PlayField;
 
+@SuppressWarnings("resource")
 public class Game {
 	private Player player1;
 	private Player player2;
@@ -208,6 +206,10 @@ public class Game {
 			return player2;
 		}
 		return player1;
+	}
+	
+	public PlayPhase getActivePhase() {
+		return this.activePhase;
 	}
 
 }

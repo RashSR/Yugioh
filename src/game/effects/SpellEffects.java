@@ -6,13 +6,16 @@ import java.util.Scanner;
 import cards.Card;
 import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
+import game.PhaseListener;
 import game.Player;
+import game.battle.PlayPhase;
 import game.map.CardMode;
 import game.map.FieldElement;
 import game.map.MonsterMode;
 import game.map.PlayField;
 
-public class SpellEffects {
+@SuppressWarnings("resource")
+public class SpellEffects{
 	//TODO: Ausspielvorausetzungen festlegen
 	public static void activateEffect(SpellCard sc, PlayField pf, int index) {
 		switch (sc.getName()) {
@@ -49,11 +52,34 @@ public class SpellEffects {
 		case "Fluchzerstörer":
 			deSpell(pf, index);
 			break;
+		case "Überläufer":
+			changeOfHeartBefore(pf);
+			break;
 		default:
 			break;
 		}
 	}
-
+	
+	private static void changeOfHeartBefore(PlayField pf) {
+		PlayField opponentField = pf.getOpponentField();
+		if(opponentField.containsMonster() && pf.hasFreeMonsterSpace()) {
+			System.out.println("Which Monster do you want from your opponent?");
+			Scanner sc = new Scanner(System.in);
+			int choice = sc.nextInt();
+			FieldElement oppFieldElement = opponentField.getFieldElement(0, choice);
+			int myIndex = pf.getFreeIndex(pf.getMonsterField());
+			FieldElement myFieldElement = pf.getFieldElement(0, myIndex);
+			myFieldElement = new FieldElement(oppFieldElement.getCard(), oppFieldElement.getOwner(), oppFieldElement.getMonsterMode(), oppFieldElement.getCardMode(), false);
+			oppFieldElement = new FieldElement(opponentField.getPlayer());
+			PhaseListener pl = new PhaseListener(pf.getGame(), PlayPhase.END);
+			pl.start();
+		}
+	}
+	
+	public static void changeOfHeartAfter() {
+		//TODO: Rest erledigen
+	}
+	
 	private static void deSpell(PlayField pf, int index) {
 		PlayField opponentField = pf.getGame().getNotActivePlayer().getPlayField();
 		System.out.println("You can destroy a Spell-Card from your or your Opponents playfield.");
@@ -209,8 +235,6 @@ public class SpellEffects {
 			}
 		}
 	}
-
-
 
 	/*
 		Yami (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Unterweltler und Hexer um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Type Fee um 200.)

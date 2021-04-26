@@ -14,6 +14,7 @@ import game.Player;
 import game.battle.Game;
 import game.effects.SpellEffects;
 
+@SuppressWarnings("resource")
 public class PlayField {
 	private Player player;
 	private Game game;
@@ -291,7 +292,15 @@ public class PlayField {
 		}
 		return true;
 	}
-
+	
+	public boolean containsMonster() {
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
 	public boolean containsSpellOrTrapCard() {
 		return (containsTrapCard() || containsSpellCard() );
 	}
@@ -333,6 +342,7 @@ public class PlayField {
 		}
 		return index;
 	}
+	
 	public int getOnlySpellOrTrapIndex(int fieldIndex) {
 		int index = -1;
 		if(hasFieldSpell()) {
@@ -345,22 +355,6 @@ public class PlayField {
 				}
 			}
 		}
-		return index;
-	}
-
-	public int getOnlySpellIndex(){
-		int index = -1;
-		if(hasFieldSpell()) {
-			return 5;
-		}
-		for(int i = 0; i < 5; i++) {
-			if(!spellAndTrapField[i].isEmpty()) {
-				if(spellAndTrapField[i].getCard() instanceof SpellCard) {
-					return i;
-				}
-			}
-		}
-
 		return index;
 	}
 
@@ -457,6 +451,10 @@ public class PlayField {
 				sendCardFromFieldToGrave(monsterField, i);
 			}
 		}
+	}
+	
+	public PlayField getOpponentField() {
+		return getGame().getNotActivePlayer().getPlayField();
 	}
 
 }
