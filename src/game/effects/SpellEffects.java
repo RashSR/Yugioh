@@ -14,7 +14,7 @@ import game.map.PlayField;
 
 public class SpellEffects {
 	//TODO: Ausspielvorausetzungen festlegen
-	public static void activateEffect(SpellCard sc, PlayField pf) {
+	public static void activateEffect(SpellCard sc, PlayField pf, int index) {
 		switch (sc.getName()) {
 		case "Topf der Gier":
 			pf.getPlayer().drawCard();
@@ -47,18 +47,17 @@ public class SpellEffects {
 			pf.getGame().checkTooMuchCards(pf.getPlayer().getHand().size() - 2);
 			break;
 		case "Fluchzerstörer":
-			deSpell(pf);
+			deSpell(pf, index);
 			break;
 		default:
 			break;
 		}
 	}
-	//TODO soll nicht nur aktivierbar sein wenn Zauberkarten vorhanden sind!
-	//TODO Aktuelle karte soll nicht mitgezählt werden
-	private static void deSpell(PlayField pf) {
+
+	private static void deSpell(PlayField pf, int index) {
 		PlayField opponentField = pf.getGame().getNotActivePlayer().getPlayField();
 		System.out.println("You can destroy a Spell-Card from your or your Opponents playfield.");
-		if(pf.containsSpellCard()) {
+		if(pf.getSpellAndTrapCount() > 1) {
 			System.out.println("Your side: ");
 			for(int i = 0; i < 6; i++) {
 				if(i < 5 && !pf.getFieldElement(1, i).isEmpty()) {
@@ -74,7 +73,7 @@ public class SpellEffects {
 				}
 			}
 		}
-		if(opponentField.containsSpellCard()) {
+		if(opponentField.getSpellAndTrapCount() > 0) {
 			System.out.println("Opponents side: ");
 			for(int i = 0; i < 6; i++) {
 				if(i < 5 && !opponentField.getFieldElement(1, i).isEmpty()) {
@@ -90,11 +89,11 @@ public class SpellEffects {
 		System.out.println("Do you want to destroy one of your(0) Spell-Cards or from your Opponent(1)?");
 		Scanner sc = new Scanner(System.in);
 		int playerChoice;
-		if(pf.getSpellCount() > 1 || opponentField.containsSpellCard()) {
-			if(pf.getSpellCount() <= 1) {
+		if(pf.getSpellAndTrapCount() > 1 || opponentField.getSpellAndTrapCount() > 0) {
+			if(pf.getSpellAndTrapCount() <= 1) {
 				playerChoice = 1;
 				System.out.println("Only your opponent has Spell-Cards.");
-			}else if(!opponentField.containsSpellCard()){
+			}else if(opponentField.getSpellAndTrapCount() == 0) {
 				playerChoice = 0;
 				System.out.println("Only you have Spell-Cards.");
 			}else {
@@ -102,12 +101,12 @@ public class SpellEffects {
 			}
 			System.out.println("Which Spell-Card do you want to destroy?");
 			int cardChoice;
-			if(playerChoice == 0 && pf.getSpellCount() == 2) {
+			if(playerChoice == 0 && pf.getSpellAndTrapCount() == 2) {
 				System.out.println("You only have one Spell-Card.");
-				cardChoice = pf.getOnlySpellIndex();
-			}else if(playerChoice == 1 && opponentField.getSpellCount() == 1) {
+				cardChoice = pf.getOnlySpellOrTrapIndex(index);
+			}else if(playerChoice == 1 && opponentField.getSpellAndTrapCount() == 1) {
 				System.out.println("Your opponent only has one Spell-Card.");
-				cardChoice = opponentField.getOnlySpellIndex();
+				cardChoice = opponentField.getOnlySpellOrTrapIndex();
 			}else {
 				cardChoice = sc.nextInt();
 			}

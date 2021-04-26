@@ -9,6 +9,7 @@ import cards.monster.MonsterCard;
 import cards.monster.fusion.FusionMonster;
 import cards.spell.SpellCard;
 import cards.spell.SpellType;
+import cards.trap.TrapCard;
 import game.Player;
 import game.battle.Game;
 import game.effects.SpellEffects;
@@ -157,7 +158,7 @@ public class PlayField {
 	}
 
 	private void activateSpellEffect(SpellCard sc, int index) {
-		SpellEffects.activateEffect(sc, this);
+		SpellEffects.activateEffect(sc, this, index);
 		if(sc.getSpellType() == SpellType.NORMAL || sc.getSpellType() == SpellType.SCHNELL) {
 			sendCardFromFieldToGrave(spellAndTrapField, index);
 		}
@@ -291,6 +292,21 @@ public class PlayField {
 		return true;
 	}
 
+	public boolean containsSpellOrTrapCard() {
+		return (containsTrapCard() || containsSpellCard() );
+	}
+
+	public boolean containsTrapCard() {
+		for(int i = 0; i < 5; i++) {
+			if(!spellAndTrapField[i].isEmpty()) {
+				if(spellAndTrapField[i].getCard() instanceof TrapCard) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public boolean containsSpellCard() {
 		if(hasFieldSpell()) {
 			return true;
@@ -303,6 +319,33 @@ public class PlayField {
 			}
 		}
 		return false;
+	}
+
+	public int getOnlySpellOrTrapIndex() {
+		int index = -1;
+		if(hasFieldSpell()) {
+			return 5;
+		}
+		for(int i = 0; i < 5; i++) {
+			if(!spellAndTrapField[i].isEmpty()) {
+				return i;
+			}
+		}
+		return index;
+	}
+	public int getOnlySpellOrTrapIndex(int fieldIndex) {
+		int index = -1;
+		if(hasFieldSpell()) {
+			return 5;
+		}
+		for(int i = 0; i < 5; i++) {
+			if(!spellAndTrapField[i].isEmpty()) {
+				if(i != fieldIndex) {
+					return i;
+				}
+			}
+		}
+		return index;
 	}
 
 	public int getOnlySpellIndex(){
@@ -319,6 +362,22 @@ public class PlayField {
 		}
 
 		return index;
+	}
+
+	public int getSpellAndTrapCount() {
+		return (getTrapCount() + getSpellCount() );
+	}
+
+	public int getTrapCount() {
+		int count = 0;
+		for(int i = 0; i < 5; i++) {
+			if(!spellAndTrapField[i].isEmpty()) {
+				if(spellAndTrapField[i].getCard() instanceof TrapCard) {
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	public int getSpellCount() {
