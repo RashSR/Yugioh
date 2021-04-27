@@ -64,20 +64,33 @@ public class SpellEffects{
 		PlayField opponentField = pf.getOpponentField();
 		if(opponentField.containsMonster() && pf.hasFreeMonsterSpace()) {
 			System.out.println("Which Monster do you want from your opponent?");
+			for(int i = 0; i < 5; i++) {
+				String monsterName = "Monster is Face-Down.";
+				if(!opponentField.getFieldElement(0, i).isEmpty()) {
+					if(opponentField.getFieldElement(0, i).getCardMode() == CardMode.FACE_UP) {
+						monsterName = opponentField.getMonsterAt(i).getName();
+					}
+					System.out.println(i + ": " + monsterName);
+				}
+			}
 			Scanner sc = new Scanner(System.in);
 			int choice = sc.nextInt();
-			FieldElement oppFieldElement = opponentField.getFieldElement(0, choice);
+			FieldElement oppFieldElement = opponentField.getMonsterField()[choice];
 			int myIndex = pf.getFreeIndex(pf.getMonsterField());
-			FieldElement myFieldElement = pf.getFieldElement(0, myIndex);
-			myFieldElement = new FieldElement(oppFieldElement.getCard(), oppFieldElement.getOwner(), oppFieldElement.getMonsterMode(), oppFieldElement.getCardMode(), false);
-			oppFieldElement = new FieldElement(opponentField.getPlayer());
-			PhaseListener pl = new PhaseListener(pf.getGame(), PlayPhase.END);
+			pf.getMonsterField()[myIndex] = new FieldElement(oppFieldElement.getCard(), oppFieldElement.getOwner(), oppFieldElement.getMonsterMode(), oppFieldElement.getCardMode(), false);
+			opponentField.getMonsterField()[choice] = new FieldElement(opponentField.getPlayer());
+			PhaseListener pl = new PhaseListener(pf, PlayPhase.END, myIndex, choice);
 			pl.start();
 		}
 	}
 	
-	public static void changeOfHeartAfter() {
-		//TODO: Rest erledigen
+	public static void changeOfHeartAfter(PlayField pf, int myIndex, int choice) {
+		//STANDARD FALL
+		FieldElement fe = pf.getFieldElement(0, myIndex);
+		System.out.println(fe);
+		pf.getGame().getActivePlayer().getPlayField().getMonsterField()[choice] = new FieldElement(fe.getCard(), fe.getOwner(), fe.getMonsterMode(), fe.getCardMode(), false);
+		pf.getMonsterField()[myIndex] = new FieldElement(pf.getPlayer());
+		System.out.println("Hier passiert noch mehr!");
 	}
 	
 	private static void deSpell(PlayField pf, int index) {
@@ -103,7 +116,12 @@ public class SpellEffects{
 			System.out.println("Opponents side: ");
 			for(int i = 0; i < 6; i++) {
 				if(i < 5 && !opponentField.getFieldElement(1, i).isEmpty()) {
-					System.out.println(i + ": " + opponentField.getCardAt(1, i).getName());
+					String cardName = "Card is Face Down.";
+					FieldElement fe = opponentField.getFieldElement(1, i);
+					if(fe.getCardMode() == CardMode.FACE_UP) {
+						cardName = opponentField.getCardAt(1, i).getName();
+					}
+					System.out.println(i + ": " + cardName);
 				}
 				else if(i == 5){
 					if(opponentField.hasFieldSpell()) {
@@ -144,6 +162,8 @@ public class SpellEffects{
 					c = pf.getCardAt(1, cardChoice);
 					if(c instanceof SpellCard) {
 						pf.sendCardFromFieldToGrave(pf.getSpellAndTrapField(), cardChoice);
+					}else {
+						System.out.println("The card was the Trap: " + c.getName());
 					}
 				}
 			}else {
@@ -153,6 +173,8 @@ public class SpellEffects{
 					c = opponentField.getCardAt(1, cardChoice);
 					if(c instanceof SpellCard) {
 						opponentField.sendCardFromFieldToGrave(opponentField.getSpellAndTrapField(), cardChoice);
+					}else {
+						System.out.println("The card was the Trap: " + c.getName());
 					}
 				}
 			}

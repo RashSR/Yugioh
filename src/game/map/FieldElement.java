@@ -4,6 +4,7 @@ import cards.Card;
 import game.Player;
 
 public class FieldElement {
+	
 	private MonsterMode mm;
 	private CardMode cm;
 	private boolean isEmpty;
@@ -73,6 +74,11 @@ public class FieldElement {
 
 	public void setCard(Card card) {
 		this.card = card;
+	}
+	
+	public String toString() {
+		return "FieldElement [mm=" + mm + ", cm=" + cm + ", isEmpty=" + isEmpty + ", owner=" + owner + ", card=" + card
+				+ "]";
 	}
 
 

@@ -62,9 +62,9 @@ public class Main {
 			d.addToDeck(c);
 		}
 		if(cardLimit >= 37) {
-			d.addToDeck(CardImport.getCardByName("Fluchzerstörer"));
-			d.addToDeck(CardImport.getCardByName("Fluchzerstörer"));
-			d.addToDeck(CardImport.getCardByName("Fluchzerstörer"));
+			d.addToDeck(CardImport.getCardByName("Überläufer"));
+			d.addToDeck(CardImport.getCardByName("Überläufer"));
+			d.addToDeck(CardImport.getCardByName("Überläufer"));
 		}
 		d.finishDeck();
 		d.printDeck();

@@ -211,5 +211,9 @@ public class Game {
 	public PlayPhase getActivePhase() {
 		return this.activePhase;
 	}
+	
+	public Player getActivePlayer() {
+		return this.activePlayer;
+	}
 
 }

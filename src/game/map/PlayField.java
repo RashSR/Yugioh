@@ -452,9 +452,12 @@ public class PlayField {
 			}
 		}
 	}
-	
+	//TODO untersuchen warum es nicht funktioniert
 	public PlayField getOpponentField() {
-		return getGame().getNotActivePlayer().getPlayField();
+		if(getGame().getActivePlayer().equals(player)) {
+			return getGame().getNotActivePlayer().getPlayField();
+		}
+		return this;
 	}
 
 }
