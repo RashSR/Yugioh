@@ -36,7 +36,7 @@ public class FieldPrinter {
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |  " + t[0] + "  |  " + t[1] + "  |  " + t[2] + "  |  " + t[3] + "  |  " + t[4] + "  |        |   Fusions-    |");
 		s.add("|     Deck:     |        |  " + c[0] + " |  " + c[1] + " |  " + c[2] + " |  " + c[3] + " |  " + c[4] + " |        |   monster:    |");
-		s.add("|      " + deckCount + "       |        |               |               |               |               |               |        |      " + fusionMonsterCount + "        |");
+		s.add("|      " + deckCount + "       |        |               |               |               |               |               |        |      " + fusionMonsterCount + "       |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
