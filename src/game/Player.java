@@ -122,8 +122,10 @@ public class Player {
 	public void showCards() {
 		System.out.println("------------------------------------");
 		System.out.println(name + " Hand:");
+		int i = 0;
 		for(Card c : handCards) {
-			System.out.println(c);
+			System.out.println(i + ": " + c);
+			i++;
 		}
 		System.out.println("------------------------------------");
 	}
