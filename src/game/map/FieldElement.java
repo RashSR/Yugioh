@@ -10,6 +10,8 @@ public class FieldElement {
 	private boolean isEmpty;
 	private Player owner;
 	private Card card;
+	private int atkChange = 0;
+	private int defChange = 0;
 	
 	public FieldElement(Card card, Player owner, MonsterMode mm, CardMode cm, boolean isEmpty) {
 		this.card = card;
@@ -75,12 +77,13 @@ public class FieldElement {
 	public void setCard(Card card) {
 		this.card = card;
 	}
-	
+
+	@Override
 	public String toString() {
 		return "FieldElement [mm=" + mm + ", cm=" + cm + ", isEmpty=" + isEmpty + ", owner=" + owner + ", card=" + card
-				+ "]";
+				+ ", atkChange=" + atkChange + ", defChange=" + defChange + "]";
 	}
-	
+
 	public boolean equals(FieldElement other) {
 		if(other == null || other.getOwner() == null) {
 			return false;
@@ -90,5 +93,20 @@ public class FieldElement {
 		return false;
 	}
 
+	public int getAtkChange() {
+		return atkChange;
+	}
+
+	public void setAtkChange(int atkChange) {
+		this.atkChange = atkChange;
+	}
+
+	public int getDefChange() {
+		return defChange;
+	}
+
+	public void setDefChange(int defChange) {
+		this.defChange = defChange;
+	}
 
 }

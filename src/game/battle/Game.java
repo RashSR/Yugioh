@@ -71,12 +71,15 @@ public class Game {
 
 	private void chooseOption() {
 		System.out.println("What do you want to do?");
+		System.out.println("(S): Show Phase");
 		System.out.println("(N): Next Phase");
 		System.out.println("(C): Show Hand");
 		System.out.println("(P): Play Card");
-		System.out.println("(E): End your turn");
-		System.out.println("(S): Show Phase");
+		System.out.println("(A): Activate facedown Cards");
+		System.out.println("(M): Change MonsterMode ");
 		System.out.println("(F): Print Field");
+		System.out.println("(B): Attack Opponent");
+		System.out.println("(E): End your turn");
 		System.out.println("(G): Give up");
 		Scanner sc = new Scanner(System.in);
 		String option = sc.nextLine();
@@ -105,6 +108,27 @@ public class Game {
 			break;
 		case "F":
 			activePlayer.getPlayField().print();
+			break;
+		case "B":
+			if(activePhase == PlayPhase.BATTLE) {
+				//TODO BATTLE
+			}else {
+				System.out.println("You can only attack in Phase: Battle.");
+			}
+			break;
+		case "A":
+			if(activePhase == PlayPhase.MAIN_1 || activePhase == PlayPhase.MAIN_2) {
+				//TODO; Change SpellCards from FaceDown to FaceUP
+			}else {
+				System.out.println("You can only activate Cards in Phase: Main1 or Main2.");
+			}
+			break;
+		case "M":
+			if(activePhase == PlayPhase.MAIN_1 || activePhase == PlayPhase.MAIN_2) {
+				//TODO; Change MonsterMode
+			}else {
+				System.out.println("You can only change MonsterMode in Phase: Main1 or Main2.");
+			}
 			break;
 		default:
 			break;

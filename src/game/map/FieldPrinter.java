@@ -30,7 +30,8 @@ public class FieldPrinter {
 		String[] cm = getCardMode(opponentField.getMonsterField());
 		String[] c = getCardMode(opponentField.getSpellAndTrapField());
 		String[] t = getType(opponentField);
-		
+		String[] ac = getAttackChange(opponentField);
+		String[] dc = getDefChange(opponentField);
 		s.add("-----------------        _________________________________________________________________________________        -----------------");
 		s.add("|               |        |               |               |               |               |               |        |               |");
 		s.add("|               |        |               |               |               |               |               |        |               |");
@@ -48,8 +49,8 @@ public class FieldPrinter {
 		s.add("|      " + graveYardCount + "       |        |               |               |               |               |               |        |    \\     /    |");
 		s.add("|               |        |   " + mm[0] + "    |   " + mm[1] + "    |   " + mm[2] + "    |   " + mm[3] + "    |   " + mm[4] + "    |        |    /_   _\\    |");
 		s.add("|               |        |  " + cm[0] + " |  " + cm[1] + " |  " + cm[2] + " |  " + cm[3] + " |  " + cm[4] + " |        |      \\ /      |");
-		s.add("|               |        |               |               |               |               |               |        |       '       |");
-		s.add("|               |        |               |               |               |               |               |        | " + fieldName + " |");
+		s.add("|               |        | " + ac[0] + "  | " + ac[1] + "  | " + ac[2] + "  | " + ac[3] +"  | " + ac[4] + "  |        |       '       |");
+		s.add("|               |        | " + dc[0] + "  | " + dc[1] + "  | " + dc[2] + "  | " + dc[3] +"  | " + dc[4] + "  |        | " + fieldName + " |");
 		s.add("|_______________|        ---------------------------------------------------------------------------------        |_______________|");
 		s.add("\n************************************************************************************************************************************");
 		fieldName = "Name: -------";
@@ -66,6 +67,8 @@ public class FieldPrinter {
 		cm = getCardMode(playField.getMonsterField());
 		c = getCardMode(playField.getSpellAndTrapField());
 		t = getType(playField);
+		ac = getAttackChange(playField);
+		dc = getDefChange(playField);
 		s.add("************************************************************************************************************************************");
 		s.add("_________________        _________________________________________________________________________________        _________________");
 		s.add("|   "+lp+"   |        |               |               |               |               |               |        |               |");
@@ -74,8 +77,8 @@ public class FieldPrinter {
 		s.add("|    \\     /    |        |               |               |               |               |               |        |      " + graveYardCount + "       |");
 		s.add("|    /_   _\\    |        |   " + mm[0] + "    |   " + mm[1] + "    |   " + mm[2] + "    |   " + mm[3] + "    |   " + mm[4] + "    |        |               |");
 		s.add("|      \\ /      |        |  " + cm[0] + " |  " + cm[1] + " |  " + cm[2] + " |  " + cm[3] + " |  " + cm[4] + " |        |               |");
-		s.add("|       '       |        |               |               |               |               |               |        |               |");
-		s.add("| " + fieldName + " |        |               |               |               |               |               |        |               |");
+		s.add("|       '       |        | " + ac[0] + "  | " + ac[1] + "  | " + ac[2] + "  | " + ac[3] +"  | " + ac[4] + "  |        |               |");
+		s.add("| " + fieldName + " |        | " + dc[0] + "  | " + dc[1] + "  | " + dc[2] + "  | " + dc[3] +"  | " + dc[4] + "  |        |               |");
 		s.add("-----------------        |-------------------------------------------------------------------------------|        -----------------");
 		s.add("_________________        |_______________________________________________________________________________|        |_______________|");
 		s.add("|               |        |               |               |               |               |               |        |               |");
@@ -89,7 +92,7 @@ public class FieldPrinter {
 		s.add("-----------------        ---------------------------------------------------------------------------------        -----------------");	
 		s.forEach(System.out::println);
 	}
-	
+
 	private String[] getType(PlayField pf) {
 		String[] s = new String[5];
 		for(int i = 0; i < 5; i++) {
@@ -106,7 +109,7 @@ public class FieldPrinter {
 		}
 		return s;
 	}
-	
+
 	private String[] getCardMode(FieldElement[] arr) {
 		String[] s = new String[5];
 		for(int i = 0; i < 5; i++) {
@@ -154,6 +157,38 @@ public class FieldPrinter {
 			}else {
 				MonsterCard mc = (MonsterCard) pf.getMonsterField()[i].getCard();
 				s[i] = "DEF: " + string2rightSize(4, ""+mc.getDef(), true);
+			}
+		}
+		return s;
+	}
+
+	private String[] getAttackChange(PlayField pf) {
+		String s[] = new String[5];
+		for(int i = 0; i < 5; i++) {
+			if(pf.getMonsterField()[i].isEmpty()) {
+				s[i] = "ATK-C: -----";
+			}else {
+				int atkChange = pf.getMonsterField()[i].getAtkChange();
+				s[i] = "ATK-C: -----";
+				if(atkChange != 0) {
+					s[i] = "ATK-C: " + string2rightSize(5, ""+atkChange, true);
+				}
+			}
+		}
+		return s;
+	}
+
+	private String[] getDefChange(PlayField pf) {
+		String s[] = new String[5];
+		for(int i = 0; i < 5; i++) {
+			if(pf.getMonsterField()[i].isEmpty()) {
+				s[i] = "DEF-C: -----";
+			}else {
+				int defChange = pf.getMonsterField()[i].getDefChange();
+				s[i] = "DEF-C: -----";
+				if(defChange != 0) {
+					s[i] = "DEF-C: " + string2rightSize(5, ""+defChange, true);
+				}
 			}
 		}
 		return s;
