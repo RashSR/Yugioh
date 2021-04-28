@@ -85,7 +85,11 @@ public class Game {
 			nextPhase();
 			break;
 		case "P":
-			playCard();
+			if(activePhase == PlayPhase.MAIN_1 || activePhase == PlayPhase.MAIN_2) {
+				playCard();
+			}else {
+				System.out.println("You can only play Cards in Phase: Main1 or Main2.");
+			}
 			break;
 		case "E":
 			endTurn();
@@ -207,11 +211,11 @@ public class Game {
 		}
 		return player1;
 	}
-	
+
 	public PlayPhase getActivePhase() {
 		return this.activePhase;
 	}
-	
+
 	public Player getActivePlayer() {
 		return this.activePlayer;
 	}
