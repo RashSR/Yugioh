@@ -1,9 +1,8 @@
-package game;
+package game.listener;
 
 import game.battle.Game;
 import game.battle.PlayPhase;
 import game.effects.SpellEffects;
-import game.map.FieldElement;
 import game.map.PlayField;
 
 public class PhaseListener extends Thread{

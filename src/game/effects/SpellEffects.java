@@ -6,9 +6,10 @@ import java.util.Scanner;
 import cards.Card;
 import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
-import game.PhaseListener;
 import game.Player;
 import game.battle.PlayPhase;
+import game.listener.FieldElementListener;
+import game.listener.PhaseListener;
 import game.map.CardMode;
 import game.map.FieldElement;
 import game.map.MonsterMode;
@@ -64,6 +65,8 @@ public class SpellEffects{
 		PlayField opponentField = pf.getOpponentField();
 		if(opponentField.containsMonster() && pf.hasFreeMonsterSpace()) {
 			System.out.println("Which Monster do you want from your opponent?");
+			int count = 0;
+			int choice = -1;
 			for(int i = 0; i < 5; i++) {
 				String monsterName = "Monster is Face-Down.";
 				if(!opponentField.getFieldElement(0, i).isEmpty()) {
@@ -71,28 +74,33 @@ public class SpellEffects{
 						monsterName = opponentField.getMonsterAt(i).getName();
 					}
 					System.out.println(i + ": " + monsterName);
+					count++;
+					choice = i;
 				}
 			}
-			Scanner sc = new Scanner(System.in);
-			int choice = sc.nextInt();
+			if(count > 1) {
+				Scanner sc = new Scanner(System.in);
+				choice = sc.nextInt();
+			}else {
+				System.out.println("Your opponent only has one Monster.");
+			}
 			FieldElement oppFieldElement = opponentField.getMonsterField()[choice];
 			int myIndex = pf.getFreeIndex(pf.getMonsterField());
 			pf.getMonsterField()[myIndex] = new FieldElement(oppFieldElement.getCard(), oppFieldElement.getOwner(), oppFieldElement.getMonsterMode(), oppFieldElement.getCardMode(), false);
 			opponentField.getMonsterField()[choice] = new FieldElement(opponentField.getPlayer());
 			PhaseListener pl = new PhaseListener(pf, PlayPhase.END, myIndex, choice);
 			pl.start();
+			FieldElementListener fl = new FieldElementListener(pf.getMonsterField(), myIndex, pl);
+			fl.start();
 		}
 	}
-	
+
 	public static void changeOfHeartAfter(PlayField pf, int myIndex, int choice) {
-		//STANDARD FALL
 		FieldElement fe = pf.getFieldElement(0, myIndex);
-		System.out.println(fe);
 		pf.getGame().getActivePlayer().getPlayField().getMonsterField()[choice] = new FieldElement(fe.getCard(), fe.getOwner(), fe.getMonsterMode(), fe.getCardMode(), false);
 		pf.getMonsterField()[myIndex] = new FieldElement(pf.getPlayer());
-		System.out.println("Hier passiert noch mehr!");
 	}
-	
+
 	private static void deSpell(PlayField pf, int index) {
 		PlayField opponentField = pf.getGame().getNotActivePlayer().getPlayField();
 		System.out.println("You can destroy a Spell-Card from your or your Opponents playfield.");
@@ -258,7 +266,7 @@ public class SpellEffects{
 		}
 	}
 
-	/*
+	/* TODO: Lichtschwerter, Kartentausch, Spalt
 		Yami (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Unterweltler und Hexer um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Type Fee um 200.)
 		Schwert der dunklen Zerstörung (type: AUSRÜSTUNG, text: Ein FINSTERNIS Monster, das mit dieser Karte ausgerüstet wird, erhöht seine ATK um 400 Punkte und verringert seine DEF um 200 Punkte.)
 		Sogen (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Ungeheuer-Krieger und Krieger um 200 Punkte.)

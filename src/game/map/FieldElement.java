@@ -80,6 +80,15 @@ public class FieldElement {
 		return "FieldElement [mm=" + mm + ", cm=" + cm + ", isEmpty=" + isEmpty + ", owner=" + owner + ", card=" + card
 				+ "]";
 	}
+	
+	public boolean equals(FieldElement other) {
+		if(other == null || other.getOwner() == null) {
+			return false;
+		}else if(other.getOwner().equals(owner)) {
+			return true;
+		}
+		return false;
+	}
 
 
 }
