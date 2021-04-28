@@ -12,7 +12,7 @@ public class FieldPrinter {
 	public FieldPrinter(PlayField playField) {
 		this.playField = playField;
 	}
-	//TODO wenn weniger als 10 Karten im Deck bzw mehr als 9 im Friedhof verschiebt sich das Feld
+
 	public void printField() {
 		ArrayList<String > s = new ArrayList<>();
 		PlayField opponentField = playField.getGame().getNotActivePlayer().getPlayField();
