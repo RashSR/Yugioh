@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import cards.Card;
 import cards.Deck;
+import cards.monster.Attribute;
 import cards.monster.MonsterCard;
 import cards.monster.fusion.FusionMonster;
 import cards.spell.SpellCard;
@@ -292,7 +293,7 @@ public class PlayField {
 		}
 		return true;
 	}
-	
+
 	public boolean containsMonster() {
 		for(int i = 0; i < 5; i++) {
 			if(!monsterField[i].isEmpty()) {
@@ -342,7 +343,7 @@ public class PlayField {
 		}
 		return index;
 	}
-	
+
 	public int getOnlySpellOrTrapIndex(int fieldIndex) {
 		int index = -1;
 		if(hasFieldSpell()) {
@@ -458,6 +459,50 @@ public class PlayField {
 			return getGame().getNotActivePlayer().getPlayField();
 		}
 		return this;
+	}
+
+	public int getMonsterWithAttributeCount(Attribute att) {
+		int count = 0;
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				if(monsterField[i].getCardMode() == CardMode.FACE_UP) {
+					MonsterCard mc = (MonsterCard) monsterField[i].getCard();
+					if(mc.getAttribute() == att) {
+						count++;
+					}
+				}
+			}
+		}
+		return count;
+	}
+	
+	public void listMonsterByAttribute(Attribute att) {
+		System.out.println(player.getName() + " has following " + att + " Monsters: ");
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				if(monsterField[i].getCardMode() == CardMode.FACE_UP) {
+					MonsterCard mc = (MonsterCard) monsterField[i].getCard();
+					if(mc.getAttribute() == att) {
+						System.out.println(i + ": " + mc.getName());
+					}
+				}
+			}
+		}
+	}
+	
+	public int getOnlyAttributeMonsterIndex(Attribute att) {
+		int index = -1;
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				if(monsterField[i].getCardMode() == CardMode.FACE_UP) {
+					MonsterCard mc = (MonsterCard) monsterField[i].getCard();
+					if(mc.getAttribute() == att) {
+						return i;
+					}
+				}
+			}
+		}
+		return index;
 	}
 
 }

@@ -84,13 +84,38 @@ public class FieldElement {
 				+ ", atkChange=" + atkChange + ", defChange=" + defChange + "]";
 	}
 
-	public boolean equals(FieldElement other) {
-		if(other == null || other.getOwner() == null) {
-			return false;
-		}else if(other.getOwner().equals(owner)) {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((card == null) ? 0 : card.hashCode());
+		result = prime * result + (isEmpty ? 1231 : 1237);
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}
-		return false;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FieldElement other = (FieldElement) obj;
+		if (card == null) {
+			if (other.card != null)
+				return false;
+		} else if (!card.equals(other.card))
+			return false;
+		if (isEmpty != other.isEmpty)
+			return false;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
+		return true;
 	}
 
 	public int getAtkChange() {
@@ -107,6 +132,14 @@ public class FieldElement {
 
 	public void setDefChange(int defChange) {
 		this.defChange = defChange;
+	}
+	
+	public void addToAtkChange(int value) {
+		this.atkChange += value;
+	}
+	
+	public void addToDefChange(int value) {
+		this.defChange += value;
 	}
 
 }

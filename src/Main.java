@@ -62,9 +62,9 @@ public class Main {
 			d.addToDeck(c);
 		}
 		if(cardLimit >= 37) {
-			d.addToDeck(CardImport.getCardByName("Überläufer"));
-			d.addToDeck(CardImport.getCardByName("Überläufer"));
-			d.addToDeck(CardImport.getCardByName("Überläufer"));
+			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
+			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
+			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
 		}
 		d.finishDeck();
 		d.printDeck();

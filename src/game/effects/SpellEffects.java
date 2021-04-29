@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import cards.Card;
+import cards.monster.Attribute;
 import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
 import game.Player;
 import game.battle.PlayPhase;
+import game.listener.EquipCardListener;
 import game.listener.FieldElementListener;
 import game.listener.PhaseListener;
 import game.map.CardMode;
@@ -56,11 +58,58 @@ public class SpellEffects{
 		case "Überläufer":
 			changeOfHeartBefore(pf);
 			break;
+		case "Schwert der dunklen Zerstörung":
+			swordOfDarkness(pf, index);
+			break;
 		default:
 			break;
 		}
 	}
-	
+	//TODO equipSpells vllt eigene Klasse? -> Ich nutze den Listener vllt dazu.
+	private static void swordOfDarkness(PlayField pf, int spellIndex) {
+		int myDarkMonsterCount = pf.getMonsterWithAttributeCount(Attribute.FINSTERNIS);
+		int opDarkMonsterCount = pf.getOpponentField().getMonsterWithAttributeCount(Attribute.FINSTERNIS);
+		if(myDarkMonsterCount > 0 || opDarkMonsterCount > 0) {
+			System.out.println("Do you want to equip your(0) or your Opponents(1) Monster?");
+			pf.listMonsterByAttribute(Attribute.FINSTERNIS);
+			pf.getOpponentField().listMonsterByAttribute(Attribute.FINSTERNIS);
+			int playerChoice;
+			Scanner sc = new Scanner(System.in);
+			if(myDarkMonsterCount == 0) {
+				System.out.println("Only your Opponent got a Darkness Monster.");
+				playerChoice = 1;
+			}else if(opDarkMonsterCount == 0) {
+				System.out.println("Only you have a Darkness Monster.");
+				playerChoice = 0;
+			}else {
+				playerChoice = sc.nextInt();
+			}
+			System.out.println("Which Monster do you want to equip?");
+			int monsterChoice;
+			if(playerChoice == 0 && myDarkMonsterCount == 1) {
+				System.out.println("You only have one Darkness Monster.");
+				monsterChoice = pf.getOnlyAttributeMonsterIndex(Attribute.FINSTERNIS);
+			}else if(playerChoice == 1 && opDarkMonsterCount == 1){
+				System.out.println("Your opponent only has one Darkness Monster.");
+				monsterChoice = pf.getOpponentField().getOnlyAttributeMonsterIndex(Attribute.FINSTERNIS);
+			}else {
+				monsterChoice = sc.nextInt();
+			}
+			if(playerChoice == 0) {
+				pf.getMonsterField()[monsterChoice].addToAtkChange(400);
+				pf.getMonsterField()[monsterChoice].addToDefChange(-200);
+				EquipCardListener eql = new EquipCardListener(pf, pf.getSpellAndTrapField(), spellIndex, pf.getMonsterField(), monsterChoice, 400, -200);
+				eql.start();
+			}else {
+				pf.getOpponentField().getMonsterField()[monsterChoice].addToAtkChange(400);
+				pf.getOpponentField().getMonsterField()[monsterChoice].addToDefChange(-200);
+				EquipCardListener eql = new EquipCardListener(pf, pf.getSpellAndTrapField(), spellIndex, pf.getOpponentField().getMonsterField(), monsterChoice, 400, -200);
+				eql.start();
+			}
+		}
+	}
+
+
 	private static void changeOfHeartBefore(PlayField pf) {
 		PlayField opponentField = pf.getOpponentField();
 		if(opponentField.containsMonster() && pf.hasFreeMonsterSpace()) {
@@ -95,6 +144,7 @@ public class SpellEffects{
 		}
 	}
 
+	//TODO SpellCard soll nach Tausch immer noch aktiv sein
 	public static void changeOfHeartAfter(PlayField pf, int myIndex, int choice) {
 		FieldElement fe = pf.getFieldElement(0, myIndex);
 		pf.getGame().getActivePlayer().getPlayField().getMonsterField()[choice] = new FieldElement(fe.getCard(), fe.getOwner(), fe.getMonsterMode(), fe.getCardMode(), false);
@@ -268,11 +318,9 @@ public class SpellEffects{
 
 	/* TODO: Lichtschwerter, Kartentausch, Spalt
 		Yami (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Unterweltler und Hexer um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Type Fee um 200.)
-		Schwert der dunklen Zerstörung (type: AUSRÜSTUNG, text: Ein FINSTERNIS Monster, das mit dieser Karte ausgerüstet wird, erhöht seine ATK um 400 Punkte und verringert seine DEF um 200 Punkte.)
 		Sogen (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Ungeheuer-Krieger und Krieger um 200 Punkte.)
 		Umi (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Fisch, Seeschlange, Donner und Aqua um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Typ Maschine und Pyro um 200 Punkte.)
 		Berg (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Drache, Gefluegeltes-Ungeheuer und Donner um 200 Punkte.)
 		Fusion (type: NORMAL, text: Fügt 2 oder mehr Fusionsmaterial-Monster zu einem neuen Fusionsmonster zusammen.)
-		Überläufer (type: NORMAL, text: Wähle ein Monster, das dein Gegner kontrolliert (unabhängig von der Position). Kontrolliere das Monster bis zum Ende deines Spielzugs.)
 	 */
 }
