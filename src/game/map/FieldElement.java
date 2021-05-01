@@ -1,6 +1,7 @@
 package game.map;
 
 import cards.Card;
+import cards.monster.MonsterCard;
 import game.Player;
 
 public class FieldElement {
@@ -12,6 +13,7 @@ public class FieldElement {
 	private Card card;
 	private int atkChange = 0;
 	private int defChange = 0;
+	private int atkCount = 1;
 	
 	public FieldElement(Card card, Player owner, MonsterMode mm, CardMode cm, boolean isEmpty) {
 		this.card = card;
@@ -140,6 +142,28 @@ public class FieldElement {
 	
 	public void addToDefChange(int value) {
 		this.defChange += value;
+	}
+	
+	public int getAtk() {
+		MonsterCard mc = (MonsterCard) this.card;
+		return mc.getAtk() + atkChange;
+	}
+	
+	public int getDef() {
+		MonsterCard mc = (MonsterCard) this.card;
+		return mc.getDef() + defChange;
+	}
+	
+	public int getAtkCount() {
+		return this.atkCount;
+	}
+	
+	public void setAtkCount(int count) {
+		this.atkCount = count;
+	}
+	
+	public void attack() {
+		this.atkCount--;
 	}
 
 }

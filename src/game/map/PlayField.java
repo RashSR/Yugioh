@@ -39,6 +39,45 @@ public class PlayField {
 		this.fieldPrinter = new FieldPrinter(this);
 	}
 
+	public void attack() {
+		System.out.println("Which Monster should attack?");
+		int monsterIndex;
+		Scanner sc = new Scanner(System.in);
+		if(getAtkMonsterCount() == 1) {
+			System.out.println("You only have one Monster in ATK Position.");
+			monsterIndex = getOnlyAtkMonsterIndex();			
+		}else if(getAtkMonsterCount() == 0){
+			System.out.println("All your Monster already attacked.");
+			return;
+		}else {
+			for(int i = 0; i < 5; i++) {
+				if(!monsterField[i].isEmpty()) {
+					if(monsterField[i].getMonsterMode() == MonsterMode.ATTACK && monsterField[i].getAtkCount() > 0) {
+						System.out.println(i+": " + monsterField[i].getCard().getName());
+					}	
+				}
+			}
+			monsterIndex = sc.nextInt();
+		}
+		
+		if(!getGame().getNotActivePlayer().getPlayField().containsMonster()) {
+			System.out.println("Direct attack to lifepoints.");
+			int opponentLp = getGame().getNotActivePlayer().getLifePoints();
+			int attackPower = monsterField[monsterIndex].getAtk();
+			getGame().getNotActivePlayer().setLifePoints(opponentLp - attackPower);
+			monsterField[monsterIndex].attack();
+			System.out.println(getGame().getNotActivePlayer().getName() + " lose " + attackPower + " lifepoints and has now " + getGame().getNotActivePlayer().getLifePoints() + " LP.");
+		}
+	}
+	
+	public void resetAtkCount(int count) {
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				monsterField[i].setAtkCount(count);
+			}
+		}
+	}
+	
 	public void playCard(int handIndex, CardMode cm, MonsterMode mm) {
 		Card card = player.getHandCardAt(handIndex);
 		int index;
@@ -84,23 +123,23 @@ public class PlayField {
 
 	private boolean tributeMonster(int tributes) {
 		System.out.println("To summon the monster you need " + tributes + " Tributes.");
-		if(tributes == 1 && getOccupiedMonsterSlotCount() > 0) {
-			if(getOccupiedMonsterSlotCount() == 1) {
+		if(tributes == 1 && getMonsterCount() > 0) {
+			if(getMonsterCount() == 1) {
 				sendCardFromFieldToGrave(monsterField, getFreeTribute());
 			}else {
 				makeTribute(tributes);
 			}
 			return true;
-		}else if(tributes == 2 && getOccupiedMonsterSlotCount() > 1) {
-			if(getOccupiedMonsterSlotCount() == 2) {
+		}else if(tributes == 2 && getMonsterCount() > 1) {
+			if(getMonsterCount() == 2) {
 				sendCardFromFieldToGrave(monsterField, getFreeTribute());
 				sendCardFromFieldToGrave(monsterField, getFreeTribute());
 			}else {
 				makeTribute(tributes);
 			}
 			return true;
-		}else if(tributes == 3 && getOccupiedMonsterSlotCount() > 2) {
-			if(getOccupiedMonsterSlotCount() == 3) {
+		}else if(tributes == 3 && getMonsterCount() > 2) {
+			if(getMonsterCount() == 3) {
 				sendCardFromFieldToGrave(monsterField, getFreeTribute());
 				sendCardFromFieldToGrave(monsterField, getFreeTribute());
 				sendCardFromFieldToGrave(monsterField, getFreeTribute());	
@@ -112,7 +151,7 @@ public class PlayField {
 		System.out.println("You don't have enough Monster on the Field.");
 		return false;
 	}
-
+	//TODO Zeige an welche Optionen vorhanden sind
 	private void makeTribute(int tributes) {
 		Scanner sc = new Scanner(System.in);
 		for(int i = 0; i < tributes; i++) {
@@ -294,6 +333,29 @@ public class PlayField {
 		return true;
 	}
 
+	public boolean containsAtkMonster() {
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				if(monsterField[i].getMonsterMode() == MonsterMode.ATTACK) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public int getAtkMonsterCount() {
+		int count = 0;
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				if(monsterField[i].getMonsterMode() == MonsterMode.ATTACK && monsterField[i].getAtkCount() > 0) {
+					count ++;
+				}
+			}
+		}
+		return count;
+	}
+
 	public boolean containsMonster() {
 		for(int i = 0; i < 5; i++) {
 			if(!monsterField[i].isEmpty()) {
@@ -302,6 +364,7 @@ public class PlayField {
 		}
 		return false;
 	}
+
 	public boolean containsSpellOrTrapCard() {
 		return (containsTrapCard() || containsSpellCard() );
 	}
@@ -390,11 +453,7 @@ public class PlayField {
 		return count;
 	}
 
-	public MonsterMode getMonsterModeAt() {
-		return null;
-	}
-
-	private int getOccupiedMonsterSlotCount() {
+	private int getMonsterCount() {
 		int count = 0;
 		for(int i = 0; i < 5; i++) {
 			if(!monsterField[i].isEmpty()) {
@@ -475,7 +534,7 @@ public class PlayField {
 		}
 		return count;
 	}
-	
+
 	public void listMonsterByAttribute(Attribute att) {
 		System.out.println(player.getName() + " has following " + att + " Monsters: ");
 		for(int i = 0; i < 5; i++) {
@@ -489,7 +548,7 @@ public class PlayField {
 			}
 		}
 	}
-	
+
 	public int getOnlyAttributeMonsterIndex(Attribute att) {
 		int index = -1;
 		for(int i = 0; i < 5; i++) {
@@ -499,6 +558,18 @@ public class PlayField {
 					if(mc.getAttribute() == att) {
 						return i;
 					}
+				}
+			}
+		}
+		return index;
+	}
+
+	public int getOnlyAtkMonsterIndex() {
+		int index = -1;
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				if(monsterField[i].getMonsterMode() == MonsterMode.ATTACK && monsterField[i].getAtkCount() > 0) {
+					return i;
 				}
 			}
 		}

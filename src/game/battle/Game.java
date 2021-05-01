@@ -23,6 +23,7 @@ public class Game {
 	private static final int HAND_CARD_LIMIT = 6;
 	private PlayPhase activePhase = PlayPhase.END;
 	private Player activePlayer;
+	private boolean isFirstRound;
 
 	public Game(PlayField playField1, PlayField playField2) {
 		if(playField1.getPlayer().getDeck().isReady() && playField2.getPlayer().getDeck().isReady()) {
@@ -54,6 +55,7 @@ public class Game {
 
 	private void startGame() {
 		nextPhase();
+		isFirstRound = true;
 		while(player1.getLifePoints() > 0 && player2.getLifePoints() > 0) {
 			if(activePlayer.equals(player2)) {
 				//endTurn();
@@ -86,6 +88,7 @@ public class Game {
 		switch (option) {
 		case "N":
 			nextPhase();
+			System.out.println("You are now in " + activePhase);
 			break;
 		case "P":
 			if(activePhase == PlayPhase.MAIN_1 || activePhase == PlayPhase.MAIN_2) {
@@ -110,10 +113,18 @@ public class Game {
 			activePlayer.getPlayField().print();
 			break;
 		case "B":
-			if(activePhase == PlayPhase.BATTLE) {
-				//TODO BATTLE
+			if(!isFirstRound) {
+				if(activePhase == PlayPhase.BATTLE) {
+					if(activePlayer.getPlayField().containsAtkMonster()) {
+						activePlayer.getPlayField().attack();
+					}else {
+						System.out.println("You don't have a Monster in ATK Position.");
+					}
+				}else {
+					System.out.println("You can only attack in Phase: Battle.");
+				}
 			}else {
-				System.out.println("You can only attack in Phase: Battle.");
+				System.out.println("You can not attack in the first round.");
 			}
 			break;
 		case "A":
@@ -190,14 +201,19 @@ public class Game {
 	}
 
 	private void endTurn() {
+		if(isFirstRound) {
+			isFirstRound = false;
+		}
 		activePhase = PlayPhase.END;
 		checkTooMuchCards(HAND_CARD_LIMIT);
+		activePlayer.getPlayField().resetAtkCount(1);
 		nextPhase();
 	}
 
 	private void nextPhase() {
 		activePhase = activePhase.nextPhase();
-		if(activePhase == PlayPhase.DRAW) {
+		switch (activePhase) {
+		case DRAW:
 			if(player1.getName().equals(activePlayer.getName())) {
 				activePlayer = player2;
 			}else {
@@ -205,11 +221,19 @@ public class Game {
 			}
 			activePlayer.drawCard();
 			nextPhase();
-		}else if(activePhase == PlayPhase.STANDBY) {
+			break;
+		case STANDBY:
 			activePlayer.setSummonCount(DEFAULT_SUMMON_COUNT);
 			nextPhase();
-		}else if(activePhase == PlayPhase.END) {
+			break;
+		case MAIN_2:
+			activePlayer.getPlayField().resetAtkCount(1);
+			break;
+		case END:
 			endTurn();
+			break;
+		default:
+			break;
 		}
 	}
 

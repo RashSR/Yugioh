@@ -17,28 +17,28 @@ public class Main {
 		Player rash = PlayerImport.getPlayerFromName("Rash");
 		Player computer = PlayerImport.getPlayerFromName("Computer");
 		testCardImport();
-		Deck rashDeck = testDeck(38);
+		Deck rashDeck = testDeck(40);
 		rash.setDeck(rashDeck);
 		PlayField rashField = testPlayField(rash);
-		Deck computerDeck = testDeck(38);
+		Deck computerDeck = testDeck(40);
 		computer.setDeck(computerDeck);
 		PlayField computerField = testPlayField(computer);
 		Game g = new Game(rashField, computerField);
 	}
-	
+
 	public static PlayField testPlayField(Player p) {
 		PlayField pf = new PlayField(p);
 		return pf;
 	}
-	
+
 	public static void testPlayerExport() {
 		PlayerExport.exportPlayer();
 	}
-	
+
 	public static void testPlayerImport() {
 		PlayerImport.importPlayers();
 	}
-	
+
 	public static void testPlayPhase() {
 		PlayPhase a = PlayPhase.DRAW;
 		System.out.println(a);
@@ -47,7 +47,7 @@ public class Main {
 			System.out.println(a);
 		}
 	}
-	
+
 	public static void testCardImport() {
 		CardImport.importCards();
 	}
@@ -62,9 +62,11 @@ public class Main {
 			d.addToDeck(c);
 		}
 		if(cardLimit >= 37) {
+			/*
 			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
 			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
 			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
+			*/ 
 		}
 		d.finishDeck();
 		d.printDeck();
