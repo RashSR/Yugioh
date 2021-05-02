@@ -65,7 +65,7 @@ public class SpellEffects{
 			break;
 		}
 	}
-	//TODO equipSpells vllt eigene Klasse? -> Ich nutze den Listener vllt dazu.
+
 	private static void swordOfDarkness(PlayField pf, int spellIndex) {
 		int myDarkMonsterCount = pf.getMonsterWithAttributeCount(Attribute.FINSTERNIS);
 		int opDarkMonsterCount = pf.getOpponentField().getMonsterWithAttributeCount(Attribute.FINSTERNIS);
@@ -316,7 +316,7 @@ public class SpellEffects{
 		}
 	}
 
-	/* TODO: Lichtschwerter, Kartentausch, Spalt
+	/* TODO: Lichtschwerter, Kartentausch, Spalt, ATK/DEF-STOP
 		Yami (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Unterweltler und Hexer um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Type Fee um 200.)
 		Sogen (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Ungeheuer-Krieger und Krieger um 200 Punkte.)
 		Umi (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Fisch, Seeschlange, Donner und Aqua um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Typ Maschine und Pyro um 200 Punkte.)

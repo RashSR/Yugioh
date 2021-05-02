@@ -66,13 +66,13 @@ public class Player {
 	public ArrayList<Card> getHand(){
 		return this.handCards;
 	}
-	
+
 	public void dropHandCard(int index) {
 		if(index < handCards.size() ) {
 			this.handCards.remove(index);
 		}
 	}
-	
+
 	public Card getHandCardAt(int index) {
 		if(index < handCards.size() ) {
 			return this.handCards.get(index);
@@ -80,7 +80,7 @@ public class Player {
 		System.out.println("You dont have that much HandCards");
 		return null;
 	}
-	
+
 	public int getSummonCount() {
 		return summonCount;
 	}
@@ -92,17 +92,21 @@ public class Player {
 	public PlayField getPlayField() {
 		return this.playfield;
 	}
-	
+
 	public void setPlayField(PlayField playfield) {
 		this.playfield = playfield;
 	}
-	
+
 	public int getLifePoints() {
 		return lifePoints;
 	}
 
 	public void setLifePoints(int lifePoints) {
-		this.lifePoints = lifePoints;
+		if(lifePoints < 0) {
+			this.lifePoints = 0;
+		}else {
+			this.lifePoints = lifePoints;
+		}
 	}
 
 	public Deck getDeck() {
@@ -127,10 +131,6 @@ public class Player {
 
 	public void setWins(int wins) {
 		this.wins = wins;
-	}
-
-	public void setName() {
-
 	}
 
 	public String getName() {

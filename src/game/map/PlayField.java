@@ -41,11 +41,11 @@ public class PlayField {
 
 	public void attack() {
 		System.out.println("Which Monster should attack?");
-		int monsterIndex;
+		int myMonsterIndex;
 		Scanner sc = new Scanner(System.in);
 		if(getAtkMonsterCount() == 1) {
 			System.out.println("You only have one Monster in ATK Position.");
-			monsterIndex = getOnlyAtkMonsterIndex();			
+			myMonsterIndex = getOnlyAtkMonsterIndex();			
 		}else if(getAtkMonsterCount() == 0){
 			System.out.println("All your Monster already attacked.");
 			return;
@@ -57,19 +57,67 @@ public class PlayField {
 					}	
 				}
 			}
-			monsterIndex = sc.nextInt();
+			myMonsterIndex = sc.nextInt();
 		}
-		
 		if(!getGame().getNotActivePlayer().getPlayField().containsMonster()) {
-			System.out.println("Direct attack to lifepoints.");
-			int opponentLp = getGame().getNotActivePlayer().getLifePoints();
-			int attackPower = monsterField[monsterIndex].getAtk();
-			getGame().getNotActivePlayer().setLifePoints(opponentLp - attackPower);
-			monsterField[monsterIndex].attack();
-			System.out.println(getGame().getNotActivePlayer().getName() + " lose " + attackPower + " lifepoints and has now " + getGame().getNotActivePlayer().getLifePoints() + " LP.");
+			directAttack(myMonsterIndex);	
+		}else {
+			System.out.println("Which Monster do you want to attack?");
+			for(int i = 0; i < 5; i++) {
+				String name = "Card is facedown.";
+				if(!getGame().getNotActivePlayer().getPlayField().getMonsterField()[i].isEmpty()) {
+					if(getGame().getNotActivePlayer().getPlayField().getMonsterField()[i].getCardMode() == CardMode.FACE_UP) {
+						name = getGame().getNotActivePlayer().getPlayField().getMonsterField()[i].getCard().getName();
+					}
+					System.out.println(i + ": " + name);
+				}
+			}
+			int opMonsterIndex;
+			if(getGame().getNotActivePlayer().getPlayField().getMonsterCount() == 1) {
+				System.out.println("Your opponent has only one Monster.");
+				opMonsterIndex = getGame().getNotActivePlayer().getPlayField().getOnlyMonsterIndex();
+			}else {
+				opMonsterIndex = sc.nextInt();
+			}
+			FieldElement opFieldElement = getGame().getNotActivePlayer().getPlayField().getMonsterField()[opMonsterIndex];
+			int myAtkPower = monsterField[myMonsterIndex].getAtk();
+			if(opFieldElement.getMonsterMode() == MonsterMode.DEFENSE) {
+				if(opFieldElement.getCardMode() == CardMode.FACE_DOWN) {
+					getGame().getNotActivePlayer().getPlayField().getMonsterField()[opMonsterIndex].changeCardMode();
+				}
+				int defPower = opFieldElement.getDef();
+				if(myAtkPower > defPower) {
+					getGame().getNotActivePlayer().getPlayField().sendCardFromFieldToGrave(getGame().getNotActivePlayer().getPlayField().getMonsterField(), opMonsterIndex);
+				}else if(myAtkPower < defPower) {
+					player.setLifePoints(player.getLifePoints() - (defPower - myAtkPower) );
+					System.out.println(player.getName() + " lose " + (defPower - myAtkPower) + " lifepoints and has now " + player.getLifePoints() + " LP.");
+				}
+			}else {
+				int opAtkPower = getGame().getNotActivePlayer().getPlayField().getMonsterField()[opMonsterIndex].getAtk();
+				if(myAtkPower > opAtkPower) {
+					getGame().getNotActivePlayer().getPlayField().sendCardFromFieldToGrave(getGame().getNotActivePlayer().getPlayField().getMonsterField(), opMonsterIndex);
+					getGame().getNotActivePlayer().setLifePoints(getGame().getNotActivePlayer().getLifePoints() - (myAtkPower - opAtkPower) );
+					System.out.println(getGame().getNotActivePlayer().getName() + " lose " + (myAtkPower - opAtkPower) + " lifepoints and has now " + getGame().getNotActivePlayer().getLifePoints() + " LP.");
+				}else if(myAtkPower < opAtkPower) {
+					sendCardFromFieldToGrave(monsterField, myMonsterIndex);
+					player.setLifePoints(player.getLifePoints() - (opAtkPower - myAtkPower) );
+					System.out.println(player.getName() + " lose " + (opAtkPower - myAtkPower) + " lifepoints and has now " + player.getLifePoints() + " LP.");
+				}else {
+					getGame().getNotActivePlayer().getPlayField().sendCardFromFieldToGrave(getGame().getNotActivePlayer().getPlayField().getMonsterField(), opMonsterIndex);
+					sendCardFromFieldToGrave(monsterField, myMonsterIndex);
+				}
+			}
 		}
+		monsterField[myMonsterIndex].attack();
 	}
-	
+
+	private void directAttack(int myMonsterIndex) {
+		int opponentLp = getGame().getNotActivePlayer().getLifePoints();
+		int attackPower = monsterField[myMonsterIndex].getAtk();
+		getGame().getNotActivePlayer().setLifePoints(opponentLp - attackPower);
+		System.out.println(getGame().getNotActivePlayer().getName() + " lose " + attackPower + " lifepoints and has now " + getGame().getNotActivePlayer().getLifePoints() + " LP.");
+	}
+
 	public void resetAtkCount(int count) {
 		for(int i = 0; i < 5; i++) {
 			if(!monsterField[i].isEmpty()) {
@@ -77,7 +125,7 @@ public class PlayField {
 			}
 		}
 	}
-	
+
 	public void playCard(int handIndex, CardMode cm, MonsterMode mm) {
 		Card card = player.getHandCardAt(handIndex);
 		int index;
@@ -571,6 +619,16 @@ public class PlayField {
 				if(monsterField[i].getMonsterMode() == MonsterMode.ATTACK && monsterField[i].getAtkCount() > 0) {
 					return i;
 				}
+			}
+		}
+		return index;
+	}
+
+	public int getOnlyMonsterIndex() {
+		int index = -1;
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				return i;
 			}
 		}
 		return index;
