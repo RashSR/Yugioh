@@ -12,7 +12,7 @@ public class FieldPrinter {
 	public FieldPrinter(PlayField playField) {
 		this.playField = playField;
 	}
-
+	//TODO Stats von verdeckten Karten vorm Gegner verstecken
 	public void printField() {
 		ArrayList<String > s = new ArrayList<>();
 		PlayField opponentField = playField.getGame().getNotActivePlayer().getPlayField();
