@@ -7,6 +7,7 @@ import cards.Card;
 import cards.monster.Attribute;
 import cards.monster.MonsterCard;
 import cards.spell.SpellCard;
+import cards.spell.SpellType;
 import game.Player;
 import game.battle.PlayPhase;
 import game.listener.EquipCardListener;
@@ -21,46 +22,60 @@ import game.map.PlayField;
 public class SpellEffects{
 	//TODO: Ausspielvorausetzungen festlegen
 	public static void activateEffect(SpellCard sc, PlayField pf, int index) {
-		switch (sc.getName()) {
-		case "Topf der Gier":
-			pf.getPlayer().drawCard();
-			pf.getPlayer().drawCard();
-			break;
-		case "Dian Keto, Meisterheiler":
-			//Ausgeben dass der Spieler geheilt wird und wie viel lp er hat.
-			pf.getPlayer().setLifePoints(pf.getPlayer().getLifePoints() + 1000);
-			break;
-		case "Funken":
-			Player opponent = pf.getGame().getNotActivePlayer();
-			opponent.setLifePoints(opponent.getLifePoints() - 200);
-			break;
-		case "Rote Medizin":
-			pf.getPlayer().setLifePoints(pf.getPlayer().getLifePoints() + 500);
-			break;
-		case "Wiedergeburt":
-			monsterReborn(pf);
-			break;
-		case "Schwarzes Loch":
-			pf.destroyAllMonster();
-			pf.getGame().getNotActivePlayer().getPlayField().destroyAllMonster();
-			break;
-		case "Raigeki":
-			pf.getGame().getNotActivePlayer().getPlayField().destroyAllMonster();
-			break;
-		case "Anmutige Barmherzigkeit":
-			pf.getPlayer().drawCard();
-			pf.getPlayer().drawCard();
-			pf.getPlayer().drawCard();
-			pf.getGame().checkTooMuchCards(pf.getPlayer().getHand().size() - 2);
-			break;
-		case "Fluchzerstörer":
-			deSpell(pf, index);
-			break;
-		case "Überläufer":
-			changeOfHeartBefore(pf);
-			break;
-		case "Schwert der dunklen Zerstörung":
-			swordOfDarkness(pf, index);
+		if(sc.getSpellType() == SpellType.FELD) {
+			activateField(sc, pf);
+		}else {
+			switch (sc.getName()) {
+			case "Topf der Gier":
+				pf.getPlayer().drawCard();
+				pf.getPlayer().drawCard();
+				break;
+			case "Dian Keto, Meisterheiler":
+				//Ausgeben dass der Spieler geheilt wird und wie viel lp er hat.
+				pf.getPlayer().setLifePoints(pf.getPlayer().getLifePoints() + 1000);
+				break;
+			case "Funken":
+				Player opponent = pf.getGame().getNotActivePlayer();
+				opponent.setLifePoints(opponent.getLifePoints() - 200);
+				break;
+			case "Rote Medizin":
+				pf.getPlayer().setLifePoints(pf.getPlayer().getLifePoints() + 500);
+				break;
+			case "Wiedergeburt":
+				monsterReborn(pf);
+				break;
+			case "Schwarzes Loch":
+				pf.destroyAllMonster();
+				pf.getGame().getNotActivePlayer().getPlayField().destroyAllMonster();
+				break;
+			case "Raigeki":
+				pf.getGame().getNotActivePlayer().getPlayField().destroyAllMonster();
+				break;
+			case "Anmutige Barmherzigkeit":
+				pf.getPlayer().drawCard();
+				pf.getPlayer().drawCard();
+				pf.getPlayer().drawCard();
+				pf.getGame().checkTooMuchCards(pf.getPlayer().getHand().size() - 2);
+				break;
+			case "Fluchzerstörer":
+				deSpell(pf, index);
+				break;
+			case "Überläufer":
+				changeOfHeartBefore(pf);
+				break;
+			case "Schwert der dunklen Zerstörung":
+				swordOfDarkness(pf, index);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private static void activateField(SpellCard sc, PlayField pf) {
+		System.out.println("Wir haben eine Feldzauberkarte.");
+		switch(sc.getName()) {
+		case "Umi":
 			break;
 		default:
 			break;

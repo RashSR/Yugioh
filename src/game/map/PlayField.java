@@ -252,15 +252,21 @@ public class PlayField {
 	}
 
 	public void activateSpellEffect(int index) {
-		SpellCard sc = (SpellCard) spellAndTrapField[index].getCard();
+		SpellCard sc = null;
+		if(index == -1) {
+			sc = fieldSpell;
+		}else {
+			sc = (SpellCard) spellAndTrapField[index].getCard();
+			if(spellAndTrapField[index].getCardMode() == CardMode.FACE_DOWN) {
+				spellAndTrapField[index].setCardMode(CardMode.FACE_UP);
+			}
+			if(sc.getSpellType() == SpellType.NORMAL || sc.getSpellType() == SpellType.SCHNELL) {
+				sendCardFromFieldToGrave(spellAndTrapField, index);
+			}
+		}
 		SpellEffects.activateEffect(sc, this, index);
-		if(spellAndTrapField[index].getCardMode() == CardMode.FACE_DOWN) {
-			spellAndTrapField[index].setCardMode(CardMode.FACE_UP);
-		}
-		if(sc.getSpellType() == SpellType.NORMAL || sc.getSpellType() == SpellType.SCHNELL) {
-			sendCardFromFieldToGrave(spellAndTrapField, index);
-		}
 	}
+	
 	//TODO: sent the Card to the right Grave
 	public void sendCardFromHandToGrave(int index) {
 		graveyard.add(player.getHandCardAt(index));
@@ -642,7 +648,7 @@ public class PlayField {
 		}
 		return index;
 	}
-	
+
 	public void printSpellCards() {
 		for(int i = 0; i < 5; i++) {
 			if(!spellAndTrapField[i].isEmpty()) {
