@@ -136,7 +136,7 @@ public class Game {
 				if(activePlayer.getPlayField().getSpellCount() > mySpellCount) {
 					System.out.println("Which SpellCard do you want to activate?");
 					activePlayer.getPlayField().printSpellCards();
-					int index = sc.nextInt();
+					int index = sc.nextInt(); //TODO bei 6 Zurück zu Auswahl
 					activePlayer.getPlayField().activateSpellEffect(index);
 				}else {
 					System.out.println("You dont have SpellCards to activate.");

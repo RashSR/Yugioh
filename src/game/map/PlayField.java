@@ -204,7 +204,7 @@ public class PlayField {
 		Scanner sc = new Scanner(System.in);
 		for(int i = 0; i < tributes; i++) {
 			System.out.println("Choose Tribute " + (i+1) + ":");
-			for(int j = 0; i < 5; i++) {
+			for(int j = 0; j < 5; j++) {
 				if(!monsterField[j].isEmpty()) {
 					System.out.println(j + ": " + monsterField[j].getCard().getName());
 				}
