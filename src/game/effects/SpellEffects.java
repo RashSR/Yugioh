@@ -27,6 +27,7 @@ public class SpellEffects{
 			pf.getPlayer().drawCard();
 			break;
 		case "Dian Keto, Meisterheiler":
+			//Ausgeben dass der Spieler geheilt wird und wie viel lp er hat.
 			pf.getPlayer().setLifePoints(pf.getPlayer().getLifePoints() + 1000);
 			break;
 		case "Funken":
@@ -316,7 +317,7 @@ public class SpellEffects{
 		}
 	}
 
-	/* TODO: Lichtschwerter, Kartentausch, Spalt, ATK/DEF-STOP
+	/* TODO: Lichtschwerter, Kartentausch, Spalt, ATK/DEF-STOP, Kartenzerstörung.
 		Yami (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Unterweltler und Hexer um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Type Fee um 200.)
 		Sogen (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Ungeheuer-Krieger und Krieger um 200 Punkte.)
 		Umi (type: FELD, text: Erhöht ATK und DEF aller Monster vom Typ Fisch, Seeschlange, Donner und Aqua um 200 Punkte. Verringert außerdem ATK und DEF aller Monster vom Typ Maschine und Pyro um 200 Punkte.)

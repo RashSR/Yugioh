@@ -199,11 +199,16 @@ public class PlayField {
 		System.out.println("You don't have enough Monster on the Field.");
 		return false;
 	}
-	//TODO Zeige an welche Optionen vorhanden sind
+
 	private void makeTribute(int tributes) {
 		Scanner sc = new Scanner(System.in);
 		for(int i = 0; i < tributes; i++) {
 			System.out.println("Choose Tribute " + (i+1) + ":");
+			for(int j = 0; i < 5; i++) {
+				if(!monsterField[i].isEmpty()) {
+					System.out.println(i + ": " + monsterField[i].getCard().getName());
+				}
+			}
 			int selection = sc.nextInt();
 			if(monsterField[selection].isEmpty()) {
 				System.out.println("Choose again!");
