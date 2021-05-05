@@ -129,7 +129,18 @@ public class Game {
 			break;
 		case "A":
 			if(activePhase == PlayPhase.MAIN_1 || activePhase == PlayPhase.MAIN_2) {
-				//TODO; Change SpellCards from FaceDown to FaceUP
+				int mySpellCount = 0;
+				if(activePlayer.getPlayField().hasFieldSpell()) {
+					mySpellCount = 1;
+				}
+				if(activePlayer.getPlayField().getSpellCount() > mySpellCount) {
+					System.out.println("Which SpellCard do you want to activate?");
+					activePlayer.getPlayField().printSpellCards();
+					int index = sc.nextInt();
+					activePlayer.getPlayField().activateSpellEffect(index);
+				}else {
+					System.out.println("You dont have SpellCards to activate.");
+				}
 			}else {
 				System.out.println("You can only activate Cards in Phase: Main1 or Main2.");
 			}

@@ -237,7 +237,7 @@ public class PlayField {
 		System.out.println("You played " + card.getName() + ".");
 		player.dropHandCard(handIndex);
 		if(card instanceof SpellCard && cm == CardMode.FACE_UP) {
-			activateSpellEffect((SpellCard)card, index);
+			activateSpellEffect(index);
 		}
 	}
 
@@ -251,8 +251,12 @@ public class PlayField {
 		setFieldSpell(fieldSpell);
 	}
 
-	private void activateSpellEffect(SpellCard sc, int index) {
+	public void activateSpellEffect(int index) {
+		SpellCard sc = (SpellCard) spellAndTrapField[index].getCard();
 		SpellEffects.activateEffect(sc, this, index);
+		if(spellAndTrapField[index].getCardMode() == CardMode.FACE_DOWN) {
+			spellAndTrapField[index].setCardMode(CardMode.FACE_UP);
+		}
 		if(sc.getSpellType() == SpellType.NORMAL || sc.getSpellType() == SpellType.SCHNELL) {
 			sendCardFromFieldToGrave(spellAndTrapField, index);
 		}
@@ -637,6 +641,16 @@ public class PlayField {
 			}
 		}
 		return index;
+	}
+	
+	public void printSpellCards() {
+		for(int i = 0; i < 5; i++) {
+			if(!spellAndTrapField[i].isEmpty()) {
+				if(spellAndTrapField[i].getCard() instanceof SpellCard) {
+					System.out.println(i + ": " + spellAndTrapField[i].getCard().getName());
+				}
+			}
+		}
 	}
 
 }
