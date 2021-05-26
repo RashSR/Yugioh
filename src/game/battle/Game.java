@@ -147,7 +147,7 @@ public class Game {
 			break;
 		case "M":
 			if(activePhase == PlayPhase.MAIN_1 || activePhase == PlayPhase.MAIN_2) {
-				//TODO; Change MonsterMode
+				activePlayer.getPlayField().changeMonsterMode();
 			}else {
 				System.out.println("You can only change MonsterMode in Phase: Main1 or Main2.");
 			}
@@ -218,6 +218,7 @@ public class Game {
 		activePhase = PlayPhase.END;
 		checkTooMuchCards(HAND_CARD_LIMIT);
 		activePlayer.getPlayField().resetAtkCount(1);
+		activePlayer.getPlayField().resetMonsterModeChange();
 		nextPhase();
 	}
 
@@ -238,7 +239,7 @@ public class Game {
 			nextPhase();
 			break;
 		case MAIN_2:
-			activePlayer.getPlayField().resetAtkCount(1);
+			//activePlayer.getPlayField().resetAtkCount(1); //TODO vllt doch erst in EndTurn
 			break;
 		case END:
 			endTurn();

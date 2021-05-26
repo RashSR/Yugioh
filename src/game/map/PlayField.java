@@ -126,6 +126,14 @@ public class PlayField {
 		}
 	}
 
+	public void resetMonsterModeChange() {
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				monsterField[i].setMonsterModeChange(true);
+			}
+		}
+	}
+
 	public void playCard(int handIndex, CardMode cm, MonsterMode mm) {
 		Card card = player.getHandCardAt(handIndex);
 		int index;
@@ -266,7 +274,36 @@ public class PlayField {
 		}
 		SpellEffects.activateEffect(sc, this, index);
 	}
-	
+
+	public void changeMonsterMode() {
+		if(canChangeMonsterMode()) {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Which Monster do you want to Change?");
+			for(int i = 0; i < 5; i++) {
+				if(!monsterField[i].isEmpty()) {
+					if(monsterField[i].canChangeMonsterMode()) {
+						System.out.println(i + ": " + monsterField[i].getCard().getName());
+					}
+				}
+			}
+			int index = sc.nextInt();
+			monsterField[index].changeMonsterMode();
+		}else {
+			System.out.println("You don't have Monster which can be changed.");
+		}
+	}
+
+	private boolean canChangeMonsterMode() {
+		for(int i = 0; i < 5; i++) {
+			if(!monsterField[i].isEmpty()) {
+				if(monsterField[i].canChangeMonsterMode()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	//TODO: sent the Card to the right Grave
 	public void sendCardFromHandToGrave(int index) {
 		graveyard.add(player.getHandCardAt(index));
@@ -293,19 +330,6 @@ public class PlayField {
 		}
 		System.out.println("There is no more space for this card at the field.");
 		return -1;
-	}
-
-	public void changeState(int row, int column) {
-		if(isValidFieldPos(row, column) && !isEmpty(row, column)) {
-			if(row == 0) {
-				monsterField[column].changeMonsterMode();
-				if(monsterField[column].getCardMode() == CardMode.FACE_DOWN) {
-					monsterField[column].changeCardMode();
-				}
-			}else if(row == 1) {
-				spellAndTrapField[column].changeCardMode();
-			}
-		}
 	}
 
 	public Card getCardAt(int row, int column) {

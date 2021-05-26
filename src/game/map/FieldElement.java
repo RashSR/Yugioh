@@ -5,39 +5,50 @@ import cards.monster.MonsterCard;
 import game.Player;
 
 public class FieldElement {
-	
+
 	private MonsterMode mm;
 	private CardMode cm;
 	private boolean isEmpty;
+	private boolean canChangeMonsterMode;
 	private Player owner;
 	private Card card;
 	private int atkChange = 0;
 	private int defChange = 0;
 	private int atkCount = 1;
-	
+
 	public FieldElement(Card card, Player owner, MonsterMode mm, CardMode cm, boolean isEmpty) {
 		this.card = card;
 		this.owner = owner;
 		this.mm = mm;
 		this.cm = cm;
 		this.isEmpty = isEmpty;
+		this.canChangeMonsterMode = false;
 	}
-	
+
 	public FieldElement() {
 		isEmpty = true;
 	}
-	
+
 	public FieldElement(Player owner) {
 		isEmpty = true;
 		this.owner = owner;
 	}
-	
+
 	public void changeCardMode() {
 		cm = cm.changeMode();
 	}
-	
+
 	public void changeMonsterMode() {
-		mm = mm.changeMode();	
+		if(canChangeMonsterMode) {
+			mm = mm.changeMode();
+			if(cm == CardMode.FACE_DOWN) {
+				cm = CardMode.FACE_UP;
+				//TODO activate flip effects
+			}
+			canChangeMonsterMode = false;
+		}else {
+			System.out.println("Can't change MonsterMode of this Card.");
+		}
 	}
 
 	public Player getOwner() {
@@ -135,35 +146,44 @@ public class FieldElement {
 	public void setDefChange(int defChange) {
 		this.defChange = defChange;
 	}
-	
+
 	public void addToAtkChange(int value) {
 		this.atkChange += value;
 	}
-	
+
 	public void addToDefChange(int value) {
 		this.defChange += value;
 	}
-	
+
 	public int getAtk() {
 		MonsterCard mc = (MonsterCard) this.card;
 		return mc.getAtk() + atkChange;
 	}
-	
+
 	public int getDef() {
 		MonsterCard mc = (MonsterCard) this.card;
 		return mc.getDef() + defChange;
 	}
-	
+
 	public int getAtkCount() {
 		return this.atkCount;
 	}
-	
+
 	public void setAtkCount(int count) {
 		this.atkCount = count;
 	}
-	
+
 	public void attack() {
 		this.atkCount--;
+		canChangeMonsterMode = false;
+	}
+	
+	public void setMonsterModeChange(boolean canChangeMonsterMode) {
+		this.canChangeMonsterMode = canChangeMonsterMode;
+	}
+	
+	public boolean canChangeMonsterMode() {
+		return this.canChangeMonsterMode;
 	}
 
 }
