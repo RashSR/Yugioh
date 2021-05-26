@@ -3,6 +3,7 @@ package game.map;
 import cards.Card;
 import cards.monster.MonsterCard;
 import game.Player;
+import game.effects.MonsterEffects;
 
 public class FieldElement {
 
@@ -34,16 +35,21 @@ public class FieldElement {
 		this.owner = owner;
 	}
 
-	public void changeCardMode() {
+	public void changeCardMode(PlayField pf) {
 		cm = cm.changeMode();
+		if(card instanceof MonsterCard) {
+			MonsterCard mc = (MonsterCard)card;
+			if(mc.isFlipp()) {
+				MonsterEffects.activateEffect(mc, pf);
+			}
+		}
 	}
 
-	public void changeMonsterMode() {
+	public void changeMonsterMode(PlayField pf) {
 		if(canChangeMonsterMode) {
 			mm = mm.changeMode();
 			if(cm == CardMode.FACE_DOWN) {
-				cm = CardMode.FACE_UP;
-				//TODO activate flip effects
+				changeCardMode(pf);
 			}
 			canChangeMonsterMode = false;
 		}else {
@@ -177,11 +183,11 @@ public class FieldElement {
 		this.atkCount--;
 		canChangeMonsterMode = false;
 	}
-	
+
 	public void setMonsterModeChange(boolean canChangeMonsterMode) {
 		this.canChangeMonsterMode = canChangeMonsterMode;
 	}
-	
+
 	public boolean canChangeMonsterMode() {
 		return this.canChangeMonsterMode;
 	}

@@ -8,29 +8,36 @@ public class MonsterCard extends Card{
 	private int def;
 	private int stars;
 	private boolean hasEffect;
+	private boolean isFlipp;
 	private Attribute attribute;
 	private MonsterType type;
-	
+
 	public MonsterCard(String name, int atk, int def, String text, int stars, boolean hasEffect, String attribute, String type) {
 		super(name, text, CardType.MONSTER);
 		this.atk = atk;
 		this.def = def;
 		this.stars = stars;
 		this.hasEffect = hasEffect;
+		if(hasEffect) {
+			setFlipp();
+		}
 		this.attribute = createAttribute(attribute);
 		this.type = createType(type);
 	}
-	
+
 	public MonsterCard(String name, int atk, int def, String text, int stars, boolean hasEffect, Attribute attribute, MonsterType type) {
 		super(name, text, CardType.MONSTER);
 		this.atk = atk;
 		this.def = def;
 		this.stars = stars;
 		this.hasEffect = hasEffect;
+		if(hasEffect) {
+			setFlipp();
+		}
 		this.attribute = attribute;
 		this.type = type;
 	}
-	
+
 	private Attribute createAttribute(String attribute) {
 		switch (attribute) {
 		case "Finsternis":
@@ -48,53 +55,53 @@ public class MonsterCard extends Card{
 		}
 		return null;
 	}
-	
+
 	private MonsterType createType(String type) {
 		switch(type) {
-			case "Hexer":
-				return MonsterType.HEXER;
-			case "Insekt":
-				return MonsterType.INSEKT;
-			case "Drache":
-				return MonsterType.DRACHE;
-			case "Krieger":
-				return MonsterType.KRIEGER;
-			case "Zombie":
-				return MonsterType.ZOMBIE;
-			case "Fels":
-				return MonsterType.FELS;
-			case "Ungeheuer":
-				return MonsterType.UNGEHEUER;
-			case "Fee":
-				return MonsterType.FEE;
-			case "Pflanze":
-				return MonsterType.PFLANZE;
-			case "Ungeheuer-Krieger":
-				return MonsterType.UNGEHEUER_KRIEGER;
-			case "Maschine":
-				return MonsterType.MASCHINE;
-			case "Aqua":
-				return MonsterType.AQUA;
-			case "Dinosaurier":
-				return MonsterType.DINOSAURIER;
-			case "Unterweltler":
-				return MonsterType.UNTERWELTLER;
-			case "Fisch":
-				return MonsterType.FISCH;
-			case "Pyro":
-				return MonsterType.PYRO;
-			case "Reptil":
-				return MonsterType.REPTIL;
-			case "Donner":
-				return MonsterType.DONNER;
-			case "Gefluegeltes-Ungeheuer":
-				return MonsterType.GEFLUEGELTES_UNGEHEUER;
-			case "Seeschlange":
-				return MonsterType.SEESCHLANGE;
+		case "Hexer":
+			return MonsterType.HEXER;
+		case "Insekt":
+			return MonsterType.INSEKT;
+		case "Drache":
+			return MonsterType.DRACHE;
+		case "Krieger":
+			return MonsterType.KRIEGER;
+		case "Zombie":
+			return MonsterType.ZOMBIE;
+		case "Fels":
+			return MonsterType.FELS;
+		case "Ungeheuer":
+			return MonsterType.UNGEHEUER;
+		case "Fee":
+			return MonsterType.FEE;
+		case "Pflanze":
+			return MonsterType.PFLANZE;
+		case "Ungeheuer-Krieger":
+			return MonsterType.UNGEHEUER_KRIEGER;
+		case "Maschine":
+			return MonsterType.MASCHINE;
+		case "Aqua":
+			return MonsterType.AQUA;
+		case "Dinosaurier":
+			return MonsterType.DINOSAURIER;
+		case "Unterweltler":
+			return MonsterType.UNTERWELTLER;
+		case "Fisch":
+			return MonsterType.FISCH;
+		case "Pyro":
+			return MonsterType.PYRO;
+		case "Reptil":
+			return MonsterType.REPTIL;
+		case "Donner":
+			return MonsterType.DONNER;
+		case "Gefluegeltes-Ungeheuer":
+			return MonsterType.GEFLUEGELTES_UNGEHEUER;
+		case "Seeschlange":
+			return MonsterType.SEESCHLANGE;
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String toString() {
 		return getName() + " (ATK: " + atk + ", def: " + def + ", stars: " + stars + ", Effekt: " + hasEffect 
@@ -144,5 +151,14 @@ public class MonsterCard extends Card{
 		this.type = type;
 	}
 	
+	private void setFlipp() {
+		if(getText().startsWith("FLIPP")) {
+			this.isFlipp = true;
+		}
+	}
 	
+	public boolean isFlipp() {
+		return this.isFlipp;
+	}
+
 }

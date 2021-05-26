@@ -83,7 +83,7 @@ public class PlayField {
 			int myAtkPower = monsterField[myMonsterIndex].getAtk();
 			if(opFieldElement.getMonsterMode() == MonsterMode.DEFENSE) {
 				if(opFieldElement.getCardMode() == CardMode.FACE_DOWN) {
-					getGame().getNotActivePlayer().getPlayField().getMonsterField()[opMonsterIndex].changeCardMode();
+					getGame().getNotActivePlayer().getPlayField().getMonsterField()[opMonsterIndex].changeCardMode(getGame().getNotActivePlayer().getPlayField());
 				}
 				int defPower = opFieldElement.getDef();
 				if(myAtkPower > defPower) {
@@ -287,7 +287,7 @@ public class PlayField {
 				}
 			}
 			int index = sc.nextInt();
-			monsterField[index].changeMonsterMode();
+			monsterField[index].changeMonsterMode(this);
 		}else {
 			System.out.println("You don't have Monster which can be changed.");
 		}
