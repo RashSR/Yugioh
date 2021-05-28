@@ -1,7 +1,9 @@
 package cards;
 
 public class Card {
-	
+	/*
+	 * This class contains all functions to use and modify a Yu-Gi-Oh Cards
+	 */
 	private CardType cardType;
 	private String name;
 	private String text;

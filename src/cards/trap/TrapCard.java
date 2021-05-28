@@ -4,6 +4,9 @@ import cards.Card;
 import cards.CardType;
 
 public class TrapCard extends Card{
+	/*
+	 * This class contains all functions to use and modify a Yu-Gi-Oh TrapCard
+	 */
 	private TrapType type;
 	
 	public TrapCard(String name, String type, String text) {
@@ -16,6 +19,9 @@ public class TrapCard extends Card{
 		this.type = type;
 	}
 	
+	/*
+	 *Get the TrapType from the corresponding String
+	 */
 	private TrapType createType(String type) {
 		switch (type) {
 		case "Normal":

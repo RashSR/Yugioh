@@ -4,7 +4,10 @@ import database.cards.CardExport;
 import database.cards.CardImport;
 
 public class ExportSession {
-
+	
+	/*
+	 *Allows the user to export any Card he wants. 
+	 */
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		boolean isRunning = true;

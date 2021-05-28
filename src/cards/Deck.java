@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cards.monster.fusion.FusionMonster;
-import game.Player;
 
 public class Deck {
+	/*
+	 * This class contains all functions to use and modify a Yu-Gi-Oh Deck
+	 */
 	private String pre = "[Deck] ";
 	private static final int MIN_CARD_LIMIT = 40;
 	private static final int MAX_CARD_LIMIT = 60;
@@ -19,13 +21,20 @@ public class Deck {
 		cards = new ArrayList<>();
 		fusionMonsters = new ArrayList<>();
 	}
-
+	
+	/*
+	 * Draw the Card on top and remove it from the Deck
+	 */
 	public Card drawCard() {
 		Card draw = cards.get(0);
 		cards.remove(0);
 		return draw;
 	}
-
+	
+	/*
+	 * Add a Card to the Deck.
+	 * It checks if the Card can be inserted (e.g. too many Cards)
+	 */
 	public void addToDeck(Card card) {
 		if(card != null) {
 			if(card instanceof FusionMonster) {
@@ -49,11 +58,12 @@ public class Deck {
 			System.out.println("Your Card is null.");
 		}
 	}
-
-	private void addFusionMonsterToDeck(FusionMonster fm) {
-		fusionMonsters.add(fm);
-	}
-
+	
+	/*
+	 * Checks if a Card can be inserted into the Deck. 
+	 * A Card can only be 3 times in the Deck.
+	 */
+	//TODO: Es muss auch limitierte Karten geben!
 	private boolean canInsert(Card card) {
 		int amount = 0;
 		String cardName = card.getName();
@@ -79,12 +89,42 @@ public class Deck {
 		return false;
 	}
 
+	/*
+	 * Adds a Fusion-Monster to the Deck
+	 */
+	private void addFusionMonsterToDeck(FusionMonster fm) {
+		fusionMonsters.add(fm);
+	}
+	
+	/*
+	 * Sets the boolean isReady to true if the Deck has enough Cards. 
+	 */
 	public void finishDeck() {
 		if(cards.size() < MIN_CARD_LIMIT) {
 			System.out.println(pre + "You have too few Cards in your Deck!");
 		}else {
 			System.out.println(pre + "Your Deck is ready!");
 			isReady = true;
+		}
+	}
+	
+	/*
+	 * Shuffles the Cards in the Deck
+	 */
+	public void shuffleDeck() {
+		Collections.shuffle(cards);
+	}
+	
+	/*
+	 * Prints the Deck and all it Cards to console
+	 */
+	public void printDeck() {
+		for(Card c : cards) {
+			System.out.println(c);
+		}
+		System.out.println("This deck have " + cards.size() + " Cards in it and " + fusionMonsters.size() + " Fusion Monster.");
+		for(FusionMonster fm : fusionMonsters) {
+			System.out.println(fm);
 		}
 	}
 
@@ -98,20 +138,6 @@ public class Deck {
 
 	public boolean isReady() {
 		return isReady;
-	}
-
-	public void shuffleDeck() {
-		Collections.shuffle(cards);
-	}
-
-	public void printDeck() {
-		for(Card c : cards) {
-			System.out.println(c);
-		}
-		System.out.println("This deck have " + cards.size() + " Cards in it and " + fusionMonsters.size() + " Fusion Monster.");
-		for(FusionMonster fm : fusionMonsters) {
-			System.out.println(fm);
-		}
 	}
 
 }

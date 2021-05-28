@@ -4,6 +4,9 @@ import cards.Card;
 import cards.CardType;
 
 public class MonsterCard extends Card{
+	/*
+	 * This class contains all functions to use and modify a Yu-Gi-Oh Monster-Card
+	 */
 	private int atk;
 	private int def;
 	private int stars;
@@ -37,7 +40,10 @@ public class MonsterCard extends Card{
 		this.attribute = attribute;
 		this.type = type;
 	}
-
+	
+	/*
+	 * Get the Attribute from the corresponding String
+	 */
 	private Attribute createAttribute(String attribute) {
 		switch (attribute) {
 		case "Finsternis":
@@ -56,6 +62,9 @@ public class MonsterCard extends Card{
 		return null;
 	}
 
+	/*
+	 * Get the MonsterType from the corresponding String
+	 */
 	private MonsterType createType(String type) {
 		switch(type) {
 		case "Hexer":
@@ -100,6 +109,15 @@ public class MonsterCard extends Card{
 			return MonsterType.SEESCHLANGE;
 		}
 		return null;
+	}
+	
+	/*
+	 * If a Monster has a flipp-effect this function sets the boolean isFlipp to true
+	 */
+	private void setFlipp() {
+		if(getText().startsWith("FLIPP")) {
+			this.isFlipp = true;
+		}
 	}
 
 	@Override
@@ -149,12 +167,6 @@ public class MonsterCard extends Card{
 
 	public void setMonsterType(MonsterType type) {
 		this.type = type;
-	}
-	
-	private void setFlipp() {
-		if(getText().startsWith("FLIPP")) {
-			this.isFlipp = true;
-		}
 	}
 	
 	public boolean isFlipp() {

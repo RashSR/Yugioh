@@ -3,7 +3,9 @@ package cards.monster.fusion;
 import cards.monster.MonsterCard;
 
 public class FusionMonster extends MonsterCard{
-	
+	/*
+	 * This class contains all functions to use and modify a Yu-Gi-Oh FusionMonster-Card
+	 */
 	private String monster1;
 	private String monster2;
 	
@@ -13,7 +15,7 @@ public class FusionMonster extends MonsterCard{
 		this.monster1 = monster1;
 		this.monster2 = monster2;
 	}
-
+	
 	public String getMonster1() {
 		return monster1;
 	}

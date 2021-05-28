@@ -239,7 +239,6 @@ public class Game {
 			nextPhase();
 			break;
 		case MAIN_2:
-			//activePlayer.getPlayField().resetAtkCount(1); //TODO vllt doch erst in EndTurn
 			break;
 		case END:
 			endTurn();
