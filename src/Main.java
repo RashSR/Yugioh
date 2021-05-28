@@ -19,11 +19,13 @@ public class Main {
 		testCardImport();
 		Deck rashDeck = testDeck(40);
 		rash.setDeck(rashDeck);
+		//rash.createDeck();
 		PlayField rashField = testPlayField(rash);
 		Deck computerDeck = testDeck(40);
 		computer.setDeck(computerDeck);
 		PlayField computerField = testPlayField(computer);
 		Game g = new Game(rashField, computerField);
+		g.startGame();
 	}
 
 	public static PlayField testPlayField(Player p) {

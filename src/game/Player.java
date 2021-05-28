@@ -1,12 +1,17 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import cards.Card;
 import cards.Deck;
+import database.cards.CardImport;
 import game.map.PlayField;
 
 public class Player {
+	/*
+	 * This class contains all functions to use and modify a Yu-Gi-Oh Player
+	 */
 	private String name;
 	private int lifePoints;
 	private PlayField playfield;
@@ -29,7 +34,44 @@ public class Player {
 		this.totalGames = totalGames;
 		this.wins = wins;
 	}
-
+	
+    /*
+     * Player can create a Deck and add chosen Cards to it.
+     * Player can add Card from all available Cards in the Database.
+     */
+	public void createDeck() {
+		deck = new Deck();
+		ArrayList<Card> availableCards = CardImport.getAllImportedCards();
+		Scanner sc = null;
+		while(!deck.isReady()) {
+			System.out.println("Which Card do you want to add to you Deck?");
+			int i = 0;
+			for(Card c : availableCards) {
+				System.out.println(i + ": " + c);
+				i++;
+			}
+			sc = new Scanner(System.in);
+			int index = sc.nextInt();
+			Card toInsertCard = availableCards.get(index);
+			deck.addToDeck(toInsertCard);
+			String cardCount = " Card";
+			if(deck.getDeckCount() > 1) {
+				cardCount += "s";
+			}
+			System.out.println("Your Deck now contains " + deck.getDeckCount() + cardCount);
+			if(deck.getDeckCount() >= 40) {
+				System.out.println("Do you want to finish your Deck?");
+				String answer = sc.next();
+				if(answer.equals("f")) {
+					deck.finishDeck();
+				}
+			}
+		}
+	}
+	
+	/*
+	 * The Player draws a Card from his Deck and add it to his handCards.
+	 */
 	public void drawCard() {
 		if(deck.getDeckCount() > 0) {
 			handCards.add(deck.drawCard());
@@ -100,7 +142,10 @@ public class Player {
 	public int getLifePoints() {
 		return lifePoints;
 	}
-
+	
+	/*
+	 * Set the LP from the Player and if the LP are below 0 set LP to 0.
+	 */
 	public void setLifePoints(int lifePoints) {
 		if(lifePoints < 0) {
 			this.lifePoints = 0;
@@ -136,7 +181,10 @@ public class Player {
 	public String getName() {
 		return this.name;
 	}
-
+	
+	/*
+	 * Print the handCards from the Player to the console
+	 */
 	public void showCards() {
 		System.out.println("------------------------------------");
 		System.out.println(name + " Hand:");

@@ -50,10 +50,9 @@ public class Game {
 			player2.drawCard();
 		}
 		playField1.print();
-		startGame();
 	}
 
-	private void startGame() {
+	public void startGame() {
 		nextPhase();
 		isFirstRound = true;
 		while(player1.getLifePoints() > 0 && player2.getLifePoints() > 0) {
