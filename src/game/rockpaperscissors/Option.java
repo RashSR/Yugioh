@@ -1,7 +1,8 @@
 package game.rockpaperscissors;
-/*
- * This are the options from the game.
- */
+
 public enum Option {
+	/*
+	 * These are the options from the game.
+	 */
 	ROCK, PAPER, SCISSORS;
 }

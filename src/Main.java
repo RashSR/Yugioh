@@ -14,18 +14,24 @@ public class Main {
 
 	public static void main(String... args) {
 		PlayerImport.importPlayers();
-		Player rash = PlayerImport.getPlayerFromName("Rash");
-		Player computer = PlayerImport.getPlayerFromName("Computer");
+		String player1 = "Rash";
+		String player2 = "Computer";
+		Player rash = PlayerImport.getPlayerByName(player1);
+		Player computer = PlayerImport.getPlayerByName(player2);
 		testCardImport();
 		Deck rashDeck = testDeck(40);
-		rash.setDeck(rashDeck);
-		//rash.createDeck();
-		PlayField rashField = testPlayField(rash);
-		Deck computerDeck = testDeck(40);
-		computer.setDeck(computerDeck);
-		PlayField computerField = testPlayField(computer);
-		Game g = new Game(rashField, computerField);
-		g.startGame();
+		if(rash != null && computer != null) {
+			rash.setDeck(rashDeck);
+			//rash.createDeck();
+			PlayField rashField = testPlayField(rash);
+			Deck computerDeck = testDeck(40);
+			computer.setDeck(computerDeck);
+			PlayField computerField = testPlayField(computer);
+			Game g = new Game(rashField, computerField);
+			g.startGame();
+		}else {
+			System.out.println("Can't start game because " + player1 + " or " + player2 + " is null.");
+		}
 	}
 
 	public static PlayField testPlayField(Player p) {
@@ -68,7 +74,7 @@ public class Main {
 			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
 			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
 			d.addToDeck(CardImport.getCardByName("Schwert der dunklen Zerstörung"));
-			*/ 
+			 */ 
 		}
 		d.finishDeck();
 		d.printDeck();
@@ -91,7 +97,7 @@ public class Main {
 		CardExport.exportMonsterCard();
 	}
 
-	public static void testRPS() {
-		RockPaperScissors.play();
+	public static void testRPS(Player human, Player computer) {
+		RockPaperScissors.play(human, computer);
 	}
 }
