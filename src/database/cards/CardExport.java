@@ -97,7 +97,7 @@ public class CardExport {
 			String type = sc.nextLine();
 
 			try {
-				PreparedStatement insertFusionMonster = conn.prepareStatement("INSERT INTO yugioh.fusion_monster VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement insertFusionMonster = conn.prepareStatement("INSERT INTO fusion_monster VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				insertFusionMonster.setString(1, name);
 				insertFusionMonster.setInt(2, atk);
 				insertFusionMonster.setInt(3, def);
@@ -137,7 +137,7 @@ public class CardExport {
 			String text = sc.nextLine();
 
 			try {
-				PreparedStatement insertSpellCard = conn.prepareStatement("INSERT INTO yugioh.spell_card VALUES (?, ?, ?)");
+				PreparedStatement insertSpellCard = conn.prepareStatement("INSERT INTO spell_card VALUES (?, ?, ?)");
 				insertSpellCard.setString(1, name);
 				insertSpellCard.setString(2, type);
 				insertSpellCard.setString(3, text);
@@ -170,7 +170,7 @@ public class CardExport {
 			String text = sc.nextLine();
 
 			try {
-				PreparedStatement insertTrapCard = conn.prepareStatement("INSERT INTO yugioh.trap_card VALUES (?, ?, ?)");
+				PreparedStatement insertTrapCard = conn.prepareStatement("INSERT INTO trap_card VALUES (?, ?, ?)");
 				insertTrapCard.setString(1, name);
 				insertTrapCard.setString(2, type);
 				insertTrapCard.setString(3, text);
