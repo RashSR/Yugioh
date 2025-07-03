@@ -8,39 +8,40 @@ public class DBConnection {
 	/*
 	 * This class connects to a database and if it is successfull it returns a Connection.
 	 */
-	private static Connection connection;
-	private static String pre = "[PostgreSQL] ";
-	private final static String URL = "jdbc:postgresql://hera.hs-regensburg.de/scr41948?currentSchema=yugioh";
-	private final static String HOST = "scr41948";	
-	private final static String PASSWORD = HOST;
-	
+    private static Connection connection;
+    private static final String PRE = "[SQLite] ";
+
+    private static final String DB_FILE = "src\\database\\Database";
+    private static final String URL     = "jdbc:sqlite:" + DB_FILE;
+    
 	/*
-	 * Tries to connect to a database with class-variables URL, HOST and PASSWORD
+	 * Tries to connect to a database with URL
 	 */
-	public static Connection connect() {
-		try {
-			connection = DriverManager.getConnection(URL, HOST, PASSWORD);
-			System.out.println(pre + "Connected to database.\n");
-			return connection;
-		}catch(SQLException e) {
-			System.out.println(pre + "Can't connect to database.");
-		}
-		return null;
-	}
-	
+    public static Connection connect() {
+        try {
+            connection = DriverManager.getConnection(URL);
+            System.out.println(PRE + "Connected to database.");
+            return connection;
+        } catch (SQLException e) {
+            System.out.println(PRE + "Can't connect to database.");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 	/*
 	 * Closes the Connection to the database.
 	 */
-	public static void closeConnection() {
-		if(connection != null) {
-			try {
-				connection.close();
-			}catch(SQLException e) {
-				System.out.println(pre + "Something is wrong by trying to disconnect.");
-			}
-			System.out.println("\n" + pre + "Disconnected from database.");
-		}else {
-			System.out.println("[ERROR] The connection is null!");
-		}
-	}
+    public static void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+                System.out.println(PRE + "Disconnected from database.");
+            } catch (SQLException e) {
+                System.out.println(PRE + "Error while disconnecting.");
+            }
+        } else {
+            System.out.println("[ERROR] The connection is null!");
+        }
+    }
 }

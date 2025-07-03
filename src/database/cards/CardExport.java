@@ -44,7 +44,7 @@ public class CardExport {
 			System.out.println();
 
 			try {
-				PreparedStatement insertMonsterCard = conn.prepareStatement("INSERT INTO yugioh.monster_card VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement insertMonsterCard = conn.prepareStatement("INSERT INTO monster_card VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 				insertMonsterCard.setString(1, name);
 				insertMonsterCard.setInt(2, atk);
 				insertMonsterCard.setInt(3, def);
@@ -53,7 +53,7 @@ public class CardExport {
 				insertMonsterCard.setBoolean(6, hasEffect);
 				insertMonsterCard.setString(7, attribute);
 				insertMonsterCard.setString(8, type);
-
+				
 				insertMonsterCard.executeUpdate();
 			} catch (SQLException e) {
 				System.out.println(pre + "Can't insert into Database.");
